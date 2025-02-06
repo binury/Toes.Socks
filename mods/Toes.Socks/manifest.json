@@ -1,0 +1,11 @@
+{
+  "Id": "Toes.Socks",
+  "PackPath": "socks.pck",
+  "Dependencies": ["NoNameFix"],
+  "Metadata": {
+    "Name": "Socks",
+    "Author": "Toes",
+    "Version": "0.3.3",
+    "Description": "Socks is a library to facilitate joy in Webfishing mod development"
+  }
+}
