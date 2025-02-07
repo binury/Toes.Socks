@@ -145,7 +145,16 @@ func get_players(include_self = false) -> Array:
 
 
 ## Get a Dictionary of all currently active players
-func get_players_dict() -> Dictionary:
+func get_players_dict(include_self = false) -> Dictionary:
 	var res = {}
-	for p in by_steam_id.values(): if is_instance_valid(p): res[p.owner_id] = p
+	for p in by_steam_id.values():
+		if is_instance_valid(p):
+			if local_player.owner_id == p.owner_id and not include_self:
+				continue
+			res[p.owner_id] = p
 	return res
+
+
+## Check if the player is busy
+func is_busy(player = local_player):
+	return player.busy
