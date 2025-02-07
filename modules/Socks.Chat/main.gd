@@ -103,12 +103,12 @@ func send_raw(msg: String, color: String = "Grey", local: bool = false):
 		_init()
 	Network._send_message(msg, _parse_color_string(color), local)
 
+
 ## Send a chat message
 ## Color can be a plain RGB hex color code
 ## or any of the following in-game predefined colors:
 ## `white` `tan` `brown` `red` `maroon` `grey` `green` `blue`
 ## `purple` `salmon` `yellow` `black` `orange` `olive` `teal`
-
 func send(msg: String, color: String = "Grey", local: bool = false):
 	if not is_instance_valid(HUD):
 		_init()
