@@ -4,18 +4,24 @@ WebFishing development library
 
 ## About
 
-Socks is an evolving development library for gdscript mods. (It is usable but not feature complete yet.)
+Socks is an evolving (work-in-progress) development library for [GDWeave](https://github.com/NotNite/GDWeave) mods.
+Our motivation publishing this library is primarily to share these solutions and utilities we've written to address
+problems we've personally encountered while making mods,
+with the hopes you might be able to spend more time focused on fun than overcoming technical roadblocks.
 
 The Players module is borrowed from [BlueberryWolf's](https://thunderstore.io/c/webfishing/p/BlueberryWolfi/BlueberryWolfiAPIs)
-while significantly improving performance and usability at the cost of backward compatibility. However, you should find
-Socks.Players will suit your existing needs without many changes.. In addition, our modules bring new features to make mod building more straightforward
-and focused on fun than overcoming technical roadblocks. This is also our motivation for working on and publishing this library.
-The Socks Chat module was created to address the naturally opaque and cumbersome process of hooking into the game's chat methods.
+but with performance and developer-experience improvements at the cost of being backward-compatible.
+Nonetheless, you should find `Socks.Players` will suit your existing needs without many changes.
+In addition, our modules introduce convenient utilities to make mod building more straightforward.
+The `Socks.Chat` module was created to address the naturally opaque and cumbersome process of hooking into the game's chat methods.
+
+Be aware that while Socks is very much usable today in your mods, it is _not_ feature complete, _yet_,
+and quite liable to introduce breaking changes with future releases.
+At this time, I have released it *primarily for the purpose of using with my own mods*, as a dependency.
 
 ## Usage
 
-Documentation is included within the source files be sure to check it out!
-
+Documentation **is** included within the source files so be sure to check it out!
 
 ### Example
 
@@ -36,6 +42,13 @@ func _on_player_messaged(message: String, player_name: String, is_self: bool):
     Chat.send(response % player_name)
 ```
 
-#### Example projects
+### Example projects
 
-[TODO!]
+- [Trivia](https://thunderstore.io/c/webfishing/p/toes/Trivia/)
+
+
+## Help
+
+Please feel free to submit [RFC issues](https://github.com/buritica/mgt/blob/master/templates/rfc_template.md) with ideas for
+new utilities or even modules. I can be reached on Discord `@toes` for discussion, collaboration, or questions.
+If you need general help building mods, I suggest joining the [Webfishing Modding Discord](https://discord.com/invite/PMdFCrJnUb).
