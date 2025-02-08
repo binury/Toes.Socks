@@ -74,9 +74,18 @@ func get_player_from_steamid(steamid: String) -> Actor:
 	return by_steam_id[steamid]
 
 
-## Get player's Steam name
-func get_player_name(player: Actor) -> String:
-	return Steam.getFriendPersonaName(player.owner_id)
+## Get player's username, either by
+func get_username(player) -> String:
+	var id: int
+	if typeof(player) == TYPE_STRING:
+		id = int(player)
+		assert(
+			check(String(id)),
+			"No player found with id: " + String(id) + "! Check if player exists first!"
+		)
+	else:
+		id = player.owner_id
+	return Steam.getFriendPersonaName(id)
 
 
 ## Get player's title
