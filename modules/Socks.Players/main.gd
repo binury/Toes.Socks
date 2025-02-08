@@ -1,9 +1,9 @@
 class_name Players
 extends Node
 
-signal _player_added(player)
-signal _player_removed(player)
-signal _ingame()
+signal player_added(player)
+signal player_removed(player)
+signal ingame()
 
 var by_steam_id := {}
 var in_game = false
@@ -19,11 +19,8 @@ func _player_ready(node: Node):
 
 	if node.name != "main_map": return
 	if not in_game: return
+
 	entities = get_tree().current_scene.get_node("Viewport/main/entities")
-
-	print("playerAPI init")
-	# add playerAPI child node with injectedMain.gd script to player
-
 	entities.connect("child_entered_tree", self, "_player_added")
 
 func is_player(node: Node) -> bool:
@@ -35,14 +32,14 @@ func _add_player(node: Node):
 func _player_removed(node):
 	if node.name == "player":
 		local_player = null
-	emit_signal("_player_removed", node)
+	emit_signal("player_removed", node)
 
 func _player_added(node):
 	if node.name == "player":
 		local_player = node
 		_add_player(node)
 		yield (get_tree().create_timer(0.5), "timeout")
-		emit_signal("_ingame")
+		emit_signal("ingame")
 	elif node.name.begins_with("@player@"):
 		_add_player(node)
 	else: return
@@ -50,7 +47,7 @@ func _player_added(node):
 	connect("tree_exited", node, "_player_removed")
 
 	yield (get_tree().create_timer(0.5), "timeout")
-	emit_signal("_player_added", node)
+	emit_signal("player_added", node)
 
 
 ############
