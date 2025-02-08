@@ -23,7 +23,6 @@ const COLORS:= {
 }
 
 
-
 var HUD
 var Chat
 var Network
@@ -53,29 +52,19 @@ func _chat_updated():
 	var messages = Network.GAMECHAT.rsplit('\n', false, 1)
 	var msg_received = messages[1]
 
-	var match_sender = RegEx.new()
-	match_sender.compile("\\](.+)\\[")
-	var sender = match_sender.search(msg_received)
-	if sender:
-		sender = sender.get_strings()[1]
-	else:
-		# Maybe in future will emit here but for now non-player messages are ignored
-		return
+	var sender = _get_sender(msg_received)
+	if not sender: return # for now, non-player messages are ignored
+	# Perhaps in future can emit, if it is useful somehow
 
+	# TODO !!!!!!!!!!!!!
 	if msg_received[0] == "(":
 		emit_signal("player_emoted", "EMOTE TODO", sender, is_local_player(sender))
 		return
 
-	var match_message = RegEx.new()
-	match_message.compile(": (.+)")
-	var message = match_message.search(msg_received)
-	if message:
-		message = message.get_strings()[1]
-	else:
-		# Player joined the game etc
-		return
-
+	var message = _get_message(msg_received)
+	if not message: return # Player joined the game etc
 	emit_signal("player_messaged", message, sender, is_local_player(sender))
+
 
 ## Facilitates passing predefined color names in addition to raw RGB values
 func _parse_color_string(s: String) -> String:
@@ -83,6 +72,22 @@ func _parse_color_string(s: String) -> String:
 		return COLORS[s.to_lower()]
 	# TODO 'convenient validation' of color string
 	return s
+
+
+## Parses a raw message line and returns the message's sender
+func _get_sender(msg: String) -> String:
+	var match_sender = RegEx.new()
+	match_sender.compile("\\](.+)\\[")
+	var sender = match_sender.search(msg)
+	return sender.get_strings()[1] if sender else ""
+
+
+## Parses a raw message line and returns the actual message content
+func _get_message(msg: String) -> String:
+	var match_message = RegEx.new()
+	match_message.compile(": (.+)")
+	var message = match_message.search(msg)
+	return message.get_strings()[1] if message else ""
 
 ############
 ## Public ##
