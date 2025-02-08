@@ -97,7 +97,7 @@ func _get_message(msg: String) -> String:
 ## This is possibly broken/forged due to namespace collision
 ## There is no workaround for this yet. Use with caution! Validate if possible
 func is_local_player(name) -> bool:
-	var local_player_name = Players.get_player_name(Players.local_player)
+	var local_player_name = Players.get_username(Players.local_player)
 	return local_player_name == name
 
 

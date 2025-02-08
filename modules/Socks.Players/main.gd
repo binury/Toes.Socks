@@ -59,16 +59,16 @@ func is_player_valid(player:Actor) -> bool:
 	return is_instance_valid(player) and is_player(player)
 
 
-## Check whether a player exists and is valid for the given ID
-func check_player_by_steamid(steamid: String) -> bool:
+## Check whether a player exists and is valid for the given Steam ID
+func check(steamid: String) -> bool:
 	if not steamid in by_steam_id: return false
 	return is_player_valid(by_steam_id[steamid])
 
 
 ## Get a Player by their Steam ID
-func get_player_from_steamid(steamid: String) -> Actor:
+func get_player(steamid: String) -> Actor:
 	assert(
-		check_player_by_steamid(steamid),
+		check(steamid),
 		"No player found with id: " + steamid + "! Check if player exists first!"
 	)
 	return by_steam_id[steamid]
@@ -89,24 +89,29 @@ func get_username(player) -> String:
 
 
 ## Get player's title
+## (Convenience method)
 func get_player_title(player: Actor) -> String:
 	assert(
 		is_player_valid(player),
-		"Argument error - Invalid Actor received - validate player object first!"
+		"Argument error - Invalid Actor received - check id & validate player object first!"
 	)
 	return player.get_node("Viewport/player_label").title
 
 
 ## Get player's Steam ID
-func get_player_steamid(player: Actor) -> int:
+## *ensures that the ID is a String rather than an int*
+## Always use this rather than directly referencing owner_id property
+## (Convenience method)
+func get_id(player: Actor) -> String:
 	assert(
 		is_player_valid(player),
-		"Argument error - Invalid Actor received - validate player object first!"
+		"Argument error - Invalid Actor received - check id & validate player object first!"
 	)
-	return player.owner_id
+	return String(player.owner_id)
 
 
 ## Get player's cosmetics (Dictionary\<String\>)
+## (Convenience method)
 ## `accessory`, `bobber`, `eye`, `hat`, `legs`, `mouth`, `nose`, `overshirt`, `pattern`, `primary_color`
 ## `secondary_color`, `species`, `tail`, `title`, `undershirt`
 func get_player_cosmetics(player: Actor) -> Dictionary:
@@ -114,6 +119,7 @@ func get_player_cosmetics(player: Actor) -> Dictionary:
 
 
 ## Get player's current Vector3 position
+## (Convenience method)
 func get_player_position(player: Actor) -> Vector3:
 	return player.global_transform.origin
 
