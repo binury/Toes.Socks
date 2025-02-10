@@ -1,7 +1,7 @@
 {
   "name": "Socks",
-  "version_number": "0.0.1",
+  "version_number": "0.0.2",
   "website_url": "https://github.com/binury/Toes.Socks",
-  "description": "Socks is an evolving (work-in-progress) development library for GDWeave mods. Our motivation for publishing this library is primarily to share these solutions and utilities we've written to address problems we've personally encountered while making mods, with the hopes you might be able to spend more time focused on fun than overcoming technical roadblocks.",
+  "description": "Socks is an evolving (work-in-progress) library to facilitate joy in Webfishing mod development",
   "dependencies": ["toes-NoNameFix-0.0.1"]
 }
