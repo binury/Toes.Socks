@@ -109,6 +109,12 @@ func send_raw(msg: String, color: String = "Grey", local: bool = false):
 	Network._send_message(msg, _parse_color_string(color), local)
 
 
+## Write a (raw) message to the local_player's chat
+## Since this is client-side only, no sanitization is done
+func write(msg: String, local:bool = false):
+	Network._update_chat(msg)
+
+
 ## Send a chat message
 ## Color can be a plain RGB hex color code
 ## or any of the following in-game predefined colors:
