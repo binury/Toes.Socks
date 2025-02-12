@@ -74,7 +74,7 @@ func get_player(steamid: String) -> Actor:
 	return by_steam_id[steamid]
 
 
-## Get player's username, either by
+## Get player's username, either by id or by actor
 func get_username(player) -> String:
 	var id: int
 	if typeof(player) == TYPE_STRING:
@@ -90,7 +90,7 @@ func get_username(player) -> String:
 
 ## Get player's title
 ## (Convenience method)
-func get_player_title(player: Actor) -> String:
+func get_title(player: Actor) -> String:
 	assert(
 		is_player_valid(player),
 		"Argument error - Invalid Actor received - check id & validate player object first!"
@@ -114,13 +114,13 @@ func get_id(player: Actor) -> String:
 ## (Convenience method)
 ## `accessory`, `bobber`, `eye`, `hat`, `legs`, `mouth`, `nose`, `overshirt`, `pattern`, `primary_color`
 ## `secondary_color`, `species`, `tail`, `title`, `undershirt`
-func get_player_cosmetics(player: Actor) -> Dictionary:
+func get_cosmetics(player: Actor = local_player) -> Dictionary:
 	return player.cosmetic_data
 
 
 ## Get player's current Vector3 position
 ## (Convenience method)
-func get_player_position(player: Actor) -> Vector3:
+func get_position(player: Actor) -> Vector3:
 	return player.global_transform.origin
 
 
@@ -138,7 +138,7 @@ func get_nearest_player(at: Vector3 = local_player.global_transform.origin) -> N
 	var min_distance: float = INF
 
 	for player in all_current_players:
-		var dist = at.distance_to(get_player_position(player))
+		var dist = at.distance_to(get_position(player))
 		if dist < min_distance:
 			min_distance = dist
 			closest_player = player
