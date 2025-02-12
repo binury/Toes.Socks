@@ -117,6 +117,18 @@ func get_id(player: Actor) -> String:
 func get_cosmetics(player: Actor = local_player) -> Dictionary:
 	return player.cosmetic_data
 
+## Set player's cosmetic
+## (Convenience method)
+## Unstable/TODO
+func set_cosmetic(type: String, to: String) -> void:
+	assert(
+		type in ['eye', 'legs', 'hat', 'mouth', 'nose', 'overshirt', 'pattern', 'primary_color', 'secondary_color', 'species', 'tail', 'title', 'undershirt'],
+		"Argument error - Invalid cosmetic type"
+	)
+	local_player.call_deferred("_change_cosmetics")
+	PlayerData._change_cosmetic(type, to)
+
+
 
 ## Get player's current Vector3 position
 ## (Convenience method)
