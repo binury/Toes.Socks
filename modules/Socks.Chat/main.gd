@@ -1,3 +1,4 @@
+class_name Chat
 extends Node
 
 signal player_messaged(message, player, was_local_player)
@@ -24,25 +25,24 @@ const COLORS:= {
 
 
 var HUD
-var Chat
-var Network
-var Players
+var _Chat
+onready var Network = get_node("/root/Network")
+onready var Players = get_node("/root/ToesSocks/Players")
 
 
 func _ready():
 	pass
 
 func _process(delta):
-	if not is_instance_valid(Chat):
+	if not is_instance_valid(_Chat):
 		_init()
 
 func _init():
 	if not is_instance_valid(get_node_or_null("/root/playerhud")):
 		return
 	HUD = $"/root/playerhud"
-	Chat = HUD.chat
-	Players = get_node_or_null("/root/ToesSocks/Players")
-	Network = get_node("/root/Network")
+	_Chat = HUD.chat
+
 	Network.connect("_chat_update", self, "_chat_updated")
 
 
