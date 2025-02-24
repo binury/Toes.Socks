@@ -61,8 +61,11 @@ func is_player_valid(player:Actor) -> bool:
 
 ## Check whether a player exists and is valid for the given Steam ID
 func check(steamid: String) -> bool:
-	if not steamid in by_steam_id: return false
-	return is_player_valid(by_steam_id[steamid])
+	var id = int(steamid)
+	if not id in by_steam_id:
+		breakpoint
+		return false
+	return is_player_valid(by_steam_id[id])
 
 
 ## Get a Player by their Steam ID
@@ -71,7 +74,7 @@ func get_player(steamid: String) -> Actor:
 		check(steamid),
 		"No player found with id: " + steamid + "! Check if player exists first!"
 	)
-	return by_steam_id[steamid]
+	return by_steam_id[int(steamid)]
 
 
 ## Get player's username, either by id or by actor
@@ -84,6 +87,7 @@ func get_username(player) -> String:
 			"No player found with id: " + String(id) + "! Check if player exists first!"
 		)
 	else:
+		if !is_instance_valid(player): return ""
 		id = player.owner_id
 	return Steam.getFriendPersonaName(id)
 
