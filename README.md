@@ -21,7 +21,7 @@ At this time, I have released it *primarily for the purpose of using with my own
 
 ## Usage
 
-Documentation **is** included within the source files so be sure to check it out!
+[Documentation](docs/index.md) **is** generated from comments within the source files. Be sure to check it out!
 
 ### Example
 
@@ -36,10 +36,7 @@ func _ready():
 func _on_player_messaged(message: String, player_name: String, is_self: bool):
     if is_self: return
 
-    print(player_name + ": " + message)
-
-    var response = "Hi, %n!"
-    Chat.send(response % player_name)
+    Chat.send("Hi, %s!" % player_name)
 ```
 
 ### Example projects
