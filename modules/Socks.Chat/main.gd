@@ -103,6 +103,14 @@ func _get_message(msg: String) -> String:
 ## Public ##
 ############
 
+## Retrieve an array of chat messages, optionally with a limit
+## @experimental
+func get_all(amt_of_lines: int = 0) -> Array:
+	if amt_of_lines > 0:
+		var messages = Array(Network.GAMECHAT.rsplit('\n', false, amt_of_lines))
+		return messages if amt_of_lines >= messages.size() else messages.slice(1, amt_of_lines)
+	var messages = Network.GAMECHAT.split('\n', false)
+	return Array(messages)
 
 ## Check whether the local_player's name matches the given name
 ## This is possibly broken/forged due to namespace collision
@@ -161,3 +169,28 @@ func emote_as(who: String, msg: String, color: String = "Grey", local: bool = fa
 ## Convenience method for sending player notifications
 func notify(msg: String):
 	PlayerData._send_notification(msg)
+
+
+## Get a reference to the HUD's chatbox
+func get_chatbox() -> LineEdit:
+	var chat = Players.local_player.hud.chat
+	return chat
+
+## Get any currently typed message from the chatbox, if any
+## @experimental
+func get_chatbox_text() -> String:
+	var chat = get_chatbox().text
+	return chat
+
+
+## @experimental
+func get_last_chatbox_char() -> String:
+	var chat = get_chatbox_text()
+	return chat[-1]
+
+
+## @experimental
+func get_last_chatbox_word() -> String:
+	var chat = get_chatbox_text()
+	var words = Array(chat.split(" "))
+	return words[-1]
