@@ -1,6 +1,6 @@
 {
   "name": "Socks",
-  "version_number": "0.1.0",
+  "version_number": "0.1.99",
   "website_url": "https://github.com/binury/Toes.Socks",
   "description": "Socks is an evolving (work-in-progress) library to facilitate joy in Webfishing mod development",
   "dependencies": ["toes-NoNameFix-0.0.1"]
