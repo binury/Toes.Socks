@@ -1,11 +1,13 @@
-class_name Chat
+# class_name Chat
+
 extends Node
+## The Socks.Chat module was created to address the naturally opaque and cumbersome process of hooking into the game's chat methods.
+## @experimental
 
 signal player_messaged(message, player, was_local_player)
 signal player_emoted(message, player, was_local_player)
 
-
-const COLORS:= {
+const COLORS := {
 	"white": "#ffeed5",
 	"tan": "#d5aa73",
 	"brown": "#6a4420",
@@ -23,7 +25,6 @@ const COLORS:= {
 	"teal": "#5a755a",
 }
 
-
 var HUD
 var _Chat
 onready var Network = get_node("/root/Network")
@@ -33,9 +34,11 @@ onready var Players = get_node("/root/ToesSocks/Players")
 func _ready():
 	pass
 
+
 func _process(delta):
 	if not is_instance_valid(_Chat):
 		_init()
+
 
 func _init():
 	if not is_instance_valid(get_node_or_null("/root/playerhud")):
@@ -47,13 +50,18 @@ func _init():
 
 
 func _chat_updated():
-	if not is_instance_valid(Network): return # Just a weird edge case
+	if not is_instance_valid(Network):
+		return  # Just a weird edge case
 
-	var messages = Network.GAMECHAT.rsplit('\n', false, 1)
+	var messages := Network.GAMECHAT.rsplit("\n", false, 1) as Array
+	if messages.size() == 1:
+		return
+
 	var msg_received = messages[1]
 
 	var sender = _get_sender(msg_received)
-	if not sender: return # for now, non-player messages are ignored
+	if not sender:
+		return  # for now, non-player messages are ignored
 	# Perhaps in future can emit, if it is useful somehow
 
 	# TODO !!!!!!!!!!!!!
@@ -62,7 +70,8 @@ func _chat_updated():
 		return
 
 	var message = _get_message(msg_received)
-	if not message: return # Player joined the game etc
+	if not message:
+		return  # Player joined the game etc
 	emit_signal("player_messaged", message, sender, is_local_player(sender))
 
 
@@ -89,9 +98,11 @@ func _get_message(msg: String) -> String:
 	var message = match_message.search(msg)
 	return message.get_strings()[1] if message else ""
 
+
 ############
 ## Public ##
 ############
+
 
 ## Check whether the local_player's name matches the given name
 ## This is possibly broken/forged due to namespace collision
@@ -111,7 +122,7 @@ func send_raw(msg: String, color: String = "Grey", local: bool = false):
 
 ## Write a (raw) message to the local_player's chat
 ## Since this is client-side only, no sanitization is done
-func write(msg: String, local:bool = false):
+func write(msg: String, local: bool = false):
 	Network._update_chat(msg)
 
 
@@ -145,6 +156,7 @@ func emote_as(who: String, msg: String, color: String = "Grey", local: bool = fa
 	if not is_instance_valid(HUD):
 		_init()
 	Network._send_message("(" + who + " " + msg + ")", _parse_color_string(color), local)
+
 
 ## Convenience method for sending player notifications
 func notify(msg: String):

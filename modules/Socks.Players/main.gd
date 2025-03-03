@@ -1,52 +1,66 @@
-class_name Players
+# class_name Players
+
 extends Node
+## The Players module is borrowed from BlueberryWolf's but with performance and developer-experience improvements at the cost of being backward-compatible.
+## Nonetheless, you should find Socks.Players will suit your existing needs without many changes.
+## In addition, our modules introduce convenient utilities to make mod building more straightforward.
+## @experimental
 
 signal player_added(player)
 signal player_removed(player)
-signal ingame()
+signal ingame
 
 var by_steam_id := {}
 var in_game = false
 var local_player
 var entities
 
+
 func _ready():
 	get_tree().connect("node_added", self, "_player_ready")
+
 
 func _player_ready(node: Node):
 	var map: Node = get_tree().current_scene
 	in_game = map.name == "world"
 
-	if node.name != "main_map": return
-	if not in_game: return
+	if node.name != "main_map":
+		return
+	if not in_game:
+		return
 
 	entities = get_tree().current_scene.get_node("Viewport/main/entities")
 	entities.connect("child_entered_tree", self, "_player_added")
 
+
 func is_player(node: Node) -> bool:
 	return node.name == "player" or node.name.begins_with("@player@")
 
+
 func _add_player(node: Node):
 	by_steam_id[node.owner_id] = node
+
 
 func _player_removed(node):
 	if node.name == "player":
 		local_player = null
 	emit_signal("player_removed", node)
 
+
 func _player_added(node):
 	if node.name == "player":
 		local_player = node
 		_add_player(node)
-		yield (get_tree().create_timer(0.5), "timeout")
+		yield(get_tree().create_timer(0.5), "timeout")
 		emit_signal("ingame")
 	elif node.name.begins_with("@player@"):
 		_add_player(node)
-	else: return
+	else:
+		return
 
 	connect("tree_exited", node, "_player_removed")
 
-	yield (get_tree().create_timer(0.5), "timeout")
+	yield(get_tree().create_timer(0.5), "timeout")
 	emit_signal("player_added", node)
 
 
@@ -54,8 +68,9 @@ func _player_added(node):
 ## Public ##
 ############
 
+
 ##  Check whether a given Actor exists as a valid player currently
-func is_player_valid(player:Actor) -> bool:
+func is_player_valid(player: Actor) -> bool:
 	return is_instance_valid(player) and is_player(player)
 
 
@@ -71,8 +86,7 @@ func check(steamid: String) -> bool:
 ## Get a Player by their Steam ID
 func get_player(steamid: String) -> Actor:
 	assert(
-		check(steamid),
-		"No player found with id: " + steamid + "! Check if player exists first!"
+		check(steamid), "No player found with id: " + steamid + "! Check if player exists first!"
 	)
 	return by_steam_id[int(steamid)]
 
@@ -87,7 +101,8 @@ func get_username(player) -> String:
 			"No player found with id: " + String(id) + "! Check if player exists first!"
 		)
 	else:
-		if !is_instance_valid(player): return ""
+		if !is_instance_valid(player):
+			return ""
 		id = player.owner_id
 	return Steam.getFriendPersonaName(id)
 
@@ -121,17 +136,46 @@ func get_id(player: Actor) -> String:
 func get_cosmetics(player: Actor = local_player) -> Dictionary:
 	return player.cosmetic_data
 
+
 ## Set player's cosmetic
 ## (Convenience method)
 ## Unstable/TODO
 func set_cosmetic(type: String, to: String) -> void:
 	assert(
-		type in ['eye', 'legs', 'hat', 'mouth', 'nose', 'overshirt', 'pattern', 'primary_color', 'secondary_color', 'species', 'tail', 'title', 'undershirt'],
+		(
+			type
+			in [
+				"eye",
+				"legs",
+				"hat",
+				"mouth",
+				"nose",
+				"overshirt",
+				"pattern",
+				"primary_color",
+				"secondary_color",
+				"species",
+				"tail",
+				"title",
+				"undershirt"
+			]
+		),
 		"Argument error - Invalid cosmetic type"
 	)
 	local_player.call_deferred("_change_cosmetics")
 	PlayerData._change_cosmetic(type, to)
 
+
+## Get player's chat color
+## (Convenience method)
+func get_chat_color(player) -> String:
+	var target: Actor
+	if typeof(player) == TYPE_STRING:
+		target = get_player(player)
+	else:
+		target = player
+	print("Player is {type}".format({"type": str(typeof(player))}))
+	return get_cosmetics(player).get("primary_color")
 
 
 ## Get player's current Vector3 position
@@ -161,6 +205,28 @@ func get_nearest_player(at: Vector3 = local_player.global_transform.origin) -> N
 	return closest_player
 
 
+## Get a list of (active) player names
+func get_names(include_self = false) -> Array:
+	var res = []
+	for p in get_players(include_self):
+		res.append(get_username(p))
+	res.sort_custom(self, "sort_by_length")
+	return res
+
+
+## Find player by username
+func find(username: String) -> Actor:
+	username = username.to_lower()
+	for p in get_players():
+		var name = get_username(p)
+		var name_unstylized = name.to_lower().replacen(" ", "")
+		if username == name.to_lower():
+			return p
+		if username.replacen(" ", "") == name_unstylized:
+			return p
+	return null
+
+
 ## Get an Array of all currently active players
 func get_players(include_self = false) -> Array:
 	var res = []
@@ -186,3 +252,7 @@ func get_players_dict(include_self = false) -> Dictionary:
 ## Check if the player is busy
 func is_busy(player = local_player):
 	return player.busy
+
+
+static func sort_by_length(a: String, b: String) -> bool:
+	return a.length() < b.length()
