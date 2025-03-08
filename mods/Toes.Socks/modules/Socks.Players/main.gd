@@ -149,6 +149,8 @@ func get_cosmetics(player: Actor = local_player) -> Dictionary:
 ## (Convenience method)
 ## Unstable/TODO
 func set_cosmetic(type: String, to: String) -> void:
+	if !is_player_valid(local_player):
+		return
 	assert(
 		(
 			type
