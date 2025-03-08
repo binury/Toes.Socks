@@ -15,9 +15,6 @@ Nonetheless, you should find `Socks.Players` will suit your existing needs witho
 In addition, our modules introduce convenient utilities to make mod building more straightforward.
 The `Socks.Chat` module was created to address the naturally opaque and cumbersome process of hooking into the game's chat methods.
 
-Be aware that while Socks is very much usable today in your mods, it is _not_ feature complete, _yet_,
-and quite liable to introduce breaking changes with future releases.
-At this time, I have released it *primarily for the purpose of using with my own mods*, as a dependency.
 
 ## Usage
 
@@ -26,22 +23,22 @@ At this time, I have released it *primarily for the purpose of using with my own
 ### Example
 
 ```gds
-func _ready():
-	Players = get_node_or_null("/root/ToesSocks/Players")
-	Chat = get_node_or_null("/root/ToesSocks/Chat")
+onready var Players = get_node_or_null("/root/ToesSocks/Players")
+onready var Chat = get_node_or_null("/root/ToesSocks/Chat")
 
+func _ready():
 	Chat.connect("player_messaged", self, "_on_player_messaged")
 
 
 func _on_player_messaged(message: String, player_name: String, is_self: bool):
-    if is_self: return
+	if is_self: return
 
-    Chat.send("Hi, %s!" % player_name)
+	Chat.send("Hi, %s!" % player_name)
 ```
 
 ### Example projects
 
-- [Trivia](https://thunderstore.io/c/webfishing/p/toes/Trivia/)
+- [Trivia](https://github.com/binury/Toes.Trivia)
 
 
 ## Help
