@@ -31,6 +31,7 @@ func _player_ready(node: Node):
 
 	entities = get_tree().current_scene.get_node("Viewport/main/entities")
 	entities.connect("child_entered_tree", self, "_player_added")
+	entities.connect("child_exiting_tree", self, "_player_removed")
 
 
 func is_player(node: Node) -> bool:
@@ -39,9 +40,14 @@ func is_player(node: Node) -> bool:
 
 func _add_player(node: Node):
 	by_steam_id[node.owner_id] = node
+	print("player added!!!!!!!!!!!!!!!!!!!")
 
 
 func _player_removed(node):
+	print("'player' removed")
+	if !is_player(node):
+		return
+	print("Player left!!!")
 	if node.name == "player":
 		local_player = null
 	emit_signal("player_removed", node)
