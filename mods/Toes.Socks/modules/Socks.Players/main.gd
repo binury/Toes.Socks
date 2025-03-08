@@ -35,21 +35,24 @@ func _player_ready(node: Node):
 
 
 func is_player(node: Node) -> bool:
-	return node.name == "player" or node.name.begins_with("@player@")
+	var actor_type = node.get("actor_type")
+	return actor_type == "player"
 
 
 func _add_player(node: Node):
 	by_steam_id[node.owner_id] = node
-	print("player added!!!!!!!!!!!!!!!!!!!")
+
+func _remove_player(node: Node):
+	by_steam_id.erase(node.owner_id)
 
 
 func _player_removed(node):
-	print("'player' removed")
 	if !is_player(node):
 		return
-	print("Player left!!!")
 	if node.name == "player":
 		local_player = null
+	else:
+		_remove_player(node)
 	emit_signal("player_removed", node)
 
 
@@ -84,7 +87,6 @@ func is_player_valid(player: Actor) -> bool:
 func check(steamid: String) -> bool:
 	var id = int(steamid)
 	if not id in by_steam_id:
-		breakpoint
 		return false
 	return is_player_valid(by_steam_id[id])
 
