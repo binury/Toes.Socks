@@ -48,6 +48,10 @@ func _init():
 
 	Network.connect("_chat_update", self, "_chat_updated")
 
+	# Enable receipt of Mouse events for clicking BBC Links (otherwise set to Ignore)
+	HUD.gamechat.mouse_filter = Control.MOUSE_FILTER_PASS
+	HUD.gamechat.connect("meta_clicked", self, "_open_url")
+
 
 func _chat_updated():
 	if not is_instance_valid(Network):
@@ -72,6 +76,12 @@ func _chat_updated():
 	var message = _get_message(msg_received)
 	if not message:
 		return  # Player joined the game etc
+	var match_uri = RegEx.new()
+	match_uri.compile("^https?:\/\/(?:www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b(?:[-a-zA-Z0-9()@:%_\\+.~#?&\\/=]*)$")
+	var result = match_uri.search(message)
+	if result:
+		var url = result.get_string()
+		write("[color=#99ddff][url=%s][LINK][/url][/color]" % url)
 	emit_signal("player_messaged", message, sender, is_local_player(sender))
 
 
@@ -97,6 +107,11 @@ func _get_message(msg: String) -> String:
 	match_message.compile(": (.+)")
 	var message = match_message.search(msg)
 	return message.get_strings()[1] if message else ""
+
+
+func _open_url(meta):
+	print("Opening URL " + str(meta))
+	Steam.activateGameOverlayToWebPage(meta)
 
 
 ############
