@@ -1,8 +1,6 @@
 # Toes.Socks
 
-WebFishing development library
-
-## About
+<img src="./assets/sockpuppet.png" width="300" alt="Sockpuppet pixel art" />
 
 Socks is an evolving (work-in-progress) development library for [GDWeave](https://github.com/NotNite/GDWeave) mods.
 Our motivation publishing this library is primarily to share these solutions and utilities we've written to address
@@ -15,6 +13,7 @@ Nonetheless, you should find `Socks.Players` will suit your existing needs witho
 In addition, our modules introduce convenient utilities to make mod building more straightforward.
 The `Socks.Chat` module was created to address the naturally opaque and cumbersome process of hooking into the game's chat methods.
 
+Sockpuppet pixel art by [okayo top hat](https://es.pixilart.com/to-hat-banana)
 
 ## Usage
 
