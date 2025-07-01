@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.2.1
+
+- Added clickable links for URLs pasted into game chat
+
 ## v0.2.0
 
 - Fixed `player_removed` event not emitting as expected     
