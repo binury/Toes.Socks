@@ -27,6 +27,7 @@ const COLORS := {
 
 var HUD
 var _Chat
+var last_seen_message = ""
 onready var Network = get_node("/root/Network")
 onready var Players = get_node("/root/ToesSocks/Players")
 
@@ -57,31 +58,45 @@ func _chat_updated():
 	if not is_instance_valid(Network):
 		return  # Just a weird edge case
 
-	var messages := Network.GAMECHAT.rsplit("\n", false, 1) as Array
-	if messages.size() == 1:
-		return
+	var chat_msgs := Network.GAMECHAT.rsplit("\n", false, 1) as Array
+	var local_chat_msgs := Network.LOCAL_GAMECHAT.rsplit("\n", false, 1) as Array
+	var is_local_message := false
+
+	var messages := chat_msgs
+	if chat_msgs.size() <= 1 or chat_msgs[1] == last_seen_message:
+		messages = local_chat_msgs
+		is_local_message = true
+	elif local_chat_msgs.size() <= 1 or local_chat_msgs[1] == last_seen_message:
+		messages = chat_msgs
+	if messages.size() <= 1: return
 
 	var msg_received = messages[1]
+	last_seen_message = msg_received
 
 	var sender = _get_sender(msg_received)
 	if not sender:
+		print("No sender case: ")
+		print(msg_received)
 		return  # for now, non-player messages are ignored
 	# Perhaps in future can emit, if it is useful somehow
 
 	# TODO !!!!!!!!!!!!!
 	if msg_received[0] == "(":
+		print(msg_received)
 		emit_signal("player_emoted", "EMOTE TODO", sender, is_local_player(sender))
 		return
 
 	var message = _get_message(msg_received)
 	if not message:
+		print("Sys message:  ")
+		print(msg_received)
 		return  # Player joined the game etc
 	var match_uri = RegEx.new()
 	match_uri.compile("^https?:\/\/(?:www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b(?:[-a-zA-Z0-9()@:%_\\+.~#?&\\/=]*)$")
 	var result = match_uri.search(message)
 	if result:
 		var url = result.get_string()
-		write("[color=#99ddff][url=%s][LINK][/url][/color]" % url)
+		write("[color=#99ddff][url=%s][LINK][/url][/color]" % url, is_local_message)
 	emit_signal("player_messaged", message, sender, is_local_player(sender))
 
 
@@ -146,7 +161,7 @@ func send_raw(msg: String, color: String = "Grey", local: bool = false):
 ## Write a (raw) message to the local_player's chat
 ## Since this is client-side only, no sanitization is done
 func write(msg: String, local: bool = false):
-	Network._update_chat(msg)
+	Network._update_chat(msg, local)
 
 
 ## Send a chat message
