@@ -65,7 +65,13 @@ func _chat_updated():
 
 	var sender = _get_sender(msg_received)
 	if not sender:
-		return  # for now, non-player messages are ignored
+		var match_uri = RegEx.new()
+		match_uri.compile("https?:\/\/(?:www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b(?:[-a-zA-Z0-9()@:%_\\+.~#?&\\/=]*)$")
+		var result = match_uri.search(msg_received)
+		if result:
+			var url = result.get_string()
+			write("[color=#99ddff][url=%s][LINK][/url][/color]" % url)
+	return  # for now, non-player messages do not emit events
 	# Perhaps in future can emit, if it is useful somehow
 
 	# TODO !!!!!!!!!!!!!
