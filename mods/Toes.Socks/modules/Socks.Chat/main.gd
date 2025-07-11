@@ -76,8 +76,10 @@ func _chat_updated():
 	var message = _get_message(msg_received)
 	if not message:
 		return  # Player joined the game etc
+
+
 	var match_uri = RegEx.new()
-	match_uri.compile("^https?:\/\/(?:www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b(?:[-a-zA-Z0-9()@:%_\\+.~#?&\\/=]*)$")
+	match_uri.compile("https?:\/\/(?:www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b(?:[-a-zA-Z0-9()@:%_\\+.~#?&\\/=]*)$")
 	var result = match_uri.search(message)
 	if result:
 		var url = result.get_string()
