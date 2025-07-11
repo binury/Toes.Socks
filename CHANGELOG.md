@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.2.4
+- Links will now generate for URL's in messages even when the message contains other preceding text
+- System messages (e.g., MOTD) will now also generate clickable `[LINK]`s
+
+
 ## v0.2.1
 
 - Added clickable links for URLs pasted into game chat
