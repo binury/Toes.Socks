@@ -259,6 +259,16 @@ func get_players_dict(include_self = false) -> Dictionary:
 	return res
 
 
+func is_player_blocked(id) -> bool:
+	return PlayerData.players_hidden.has(int(id))
+
+func is_player_muted(id) -> bool:
+	return PlayerData.players_muted.has(int(id))
+
+func is_player_ignored(id) -> bool:
+	return is_player_blocked(id) or is_player_muted(id)
+
+
 ## Check if the player is busy
 func is_busy(player = local_player):
 	return player.busy
