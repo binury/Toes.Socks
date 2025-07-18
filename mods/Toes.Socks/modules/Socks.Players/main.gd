@@ -64,6 +64,7 @@ func _player_added(node):
 		emit_signal("ingame")
 	elif node.name.begins_with("@player@"):
 		_add_player(node)
+		Steam.setPlayedWith(node.owner_id)
 	else:
 		return
 
