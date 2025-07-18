@@ -178,14 +178,20 @@ func set_cosmetic(type: String, to: String) -> void:
 
 ## Get player's chat color
 ## (Convenience method)
-func get_chat_color(player) -> String:
+## Returns a Color or null
+func get_chat_color(player):
 	var target: Actor
 	if typeof(player) == TYPE_STRING:
 		target = get_player(player)
 	else:
 		target = player
-	print("Player is {type}".format({"type": str(typeof(player))}))
-	return get_cosmetics(player).get("primary_color")
+
+	var target_primary_color = get_cosmetics(target).get("primary_color")
+	if (not target_primary_color) or (not target_primary_color in Globals.cosmetic_data):
+		return null
+	var player_color = Globals.cosmetic_data[target_primary_color]["file"].main_color
+	return player_color
+
 
 
 ## Get player's current Vector3 position
