@@ -116,6 +116,12 @@ func get_username(player) -> String:
 	return Steam.getFriendPersonaName(id)
 
 
+## Get the current lobby's owner ("host")
+func get_lobby_owner():
+	if Network.STEAM_LOBBY_ID > 1: return local_player
+	return get_player(str(Steam.getLobbyOwner(Network.STEAM_LOBBY_ID)))
+
+
 ## Get player's title
 ## (Convenience method)
 func get_title(player: Actor) -> String:
