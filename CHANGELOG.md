@@ -1,5 +1,15 @@
 # Changelog
 
+## v0.2.7
+- Fixes `Recently Seen Players` Steam integration. Now everyone you meet in lobbies will
+ be listed in your Game Overview > Recent Players UI.
+
+## v0.2.6
+- Hotfix Players.chat
+
+## v0.2.5
+- Added Players.is_player_ignored helpers for checking if a player has been muted or blocked
+
 ## v0.2.4
 - Links will now generate for URL's in messages even when the message contains other preceding text
 - System messages (e.g., MOTD) will now also generate clickable `[LINK]`s
