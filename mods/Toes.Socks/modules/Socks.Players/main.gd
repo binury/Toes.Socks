@@ -117,7 +117,7 @@ func get_username(player) -> String:
 
 
 ## Get the current lobby's owner ("host")
-func get_lobby_owner():
+func get_lobby_owner() -> Actor:
 	if Network.STEAM_LOBBY_ID > 1: return local_player
 	return get_player(str(Steam.getLobbyOwner(Network.STEAM_LOBBY_ID)))
 
