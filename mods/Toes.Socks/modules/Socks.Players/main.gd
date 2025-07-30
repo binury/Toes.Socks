@@ -12,6 +12,7 @@ signal ingame
 
 var by_steam_id := {}
 var in_game = false
+## Our player; you
 var local_player
 var entities
 
@@ -101,7 +102,7 @@ func get_player(steamid: String) -> Actor:
 
 
 ## Get player's username, either by id or by actor
-func get_username(player) -> String:
+func get_username(player = local_player) -> String:
 	var id: int
 	if typeof(player) == TYPE_STRING:
 		id = int(player)
@@ -124,7 +125,7 @@ func get_lobby_owner() -> Actor:
 
 ## Get player's title
 ## (Convenience method)
-func get_title(player: Actor) -> String:
+func get_title(player: Actor = local_player) -> String:
 	assert(
 		is_player_valid(player),
 		"Argument error - Invalid Actor received - check id & validate player object first!"
@@ -134,9 +135,9 @@ func get_title(player: Actor) -> String:
 
 ## Get player's Steam ID
 ## *ensures that the ID is a String rather than an int*
-## Always use this rather than directly referencing owner_id property
+## !Always use this rather than directly referencing owner_id property!
 ## (Convenience method)
-func get_id(player: Actor) -> String:
+func get_id(player: Actor = local_player) -> String:
 	assert(
 		is_player_valid(player),
 		"Argument error - Invalid Actor received - check id & validate player object first!"
@@ -186,7 +187,7 @@ func set_cosmetic(type: String, to: String) -> void:
 ## Get player's chat color
 ## (Convenience method)
 ## Returns a Color or null
-func get_chat_color(player):
+func get_chat_color(player = local_player):
 	var target: Actor
 	if typeof(player) == TYPE_STRING:
 		target = get_player(player)
@@ -203,7 +204,7 @@ func get_chat_color(player):
 
 ## Get player's current Vector3 position
 ## (Convenience method)
-func get_position(player: Actor) -> Vector3:
+func get_position(player: Actor = local_player) -> Vector3:
 	return player.global_transform.origin
 
 
