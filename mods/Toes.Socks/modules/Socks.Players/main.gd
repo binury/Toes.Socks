@@ -1,10 +1,4 @@
-# class_name Players
-
 extends Node
-## The Players module is borrowed from BlueberryWolf's but with performance and developer-experience improvements at the cost of being backward-compatible.
-## Nonetheless, you should find Socks.Players will suit your existing needs without many changes.
-## In addition, our modules introduce convenient utilities to make mod building more straightforward.
-## @experimental
 
 signal player_added(player)
 signal player_removed(player)

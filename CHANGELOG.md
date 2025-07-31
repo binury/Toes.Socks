@@ -1,5 +1,17 @@
 # Changelog
 
+## v0.3.0
+- New Socks.Utils module
+- Added Players.get_lobby_owner for retrieving the current lobby's host
+- Changed Players methods to default to the local player when appropriate:
+    - get_username
+    - get_title
+    - get_id
+    - get_chat_color
+    - get_position
+- Chat links should now open in your browser rather than within the Steam overlay
+- Opening Discord links will now require viewing a safety warning and confirmation from the user
+
 ## v0.2.7
 - Fixes `Recently Seen Players` Steam integration. Now everyone you meet in lobbies will
  be listed in your Game Overview > Recent Players UI.

@@ -53,24 +53,39 @@ func _init():
 	HUD.gamechat.connect("meta_clicked", self, "_open_url")
 
 
+
+func _write_link(url:String):
+	var MAX_TITLE_CHARS := 30
+	var LINK_COLOR = "66C0F4"
+
+	var path_regex = RegEx.new()
+	path_regex.compile("[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b(?:[-a-zA-Z0-9()@:%_\\+.~#&\\/=]*)")
+	var path = path_regex.search(url)
+	var link_text = "LINK: " + path.get_string()
+	if link_text.length() > MAX_TITLE_CHARS:
+		link_text = link_text.substr(0, MAX_TITLE_CHARS) + "…"
+	write("[center][font=res://Assets/Themes/font_alternate.tres][color=#%s][url=%s][%s][/url][/color][/font][/center]" % [LINK_COLOR, url, link_text])
+
+
 func _chat_updated():
 	if not is_instance_valid(Network):
 		return  # Just a weird edge case
 
 	var messages := Network.GAMECHAT.rsplit("\n", false, 1) as Array
+
 	if messages.size() == 1:
 		return
 
+	var URI_REGEX := "https?:\/\/(?:www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b(?:[-a-zA-Z0-9()@:%_\\+.~#?&\\/=]*)"
 	var msg_received = messages[1]
-
+	print(msg_received)
 	var sender = _get_sender(msg_received)
 	if not sender:
 		var match_uri = RegEx.new()
-		match_uri.compile("https?:\/\/(?:www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b(?:[-a-zA-Z0-9()@:%_\\+.~#?&\\/=]*)$")
+		match_uri.compile(URI_REGEX)
 		var result = match_uri.search(msg_received)
 		if result:
-			var url = result.get_string()
-			write("[color=#99ddff][url=%s][LINK][/url][/color]" % url)
+			_write_link(result.get_string())
 	return  # for now, non-player messages do not emit events
 	# Perhaps in future can emit, if it is useful somehow
 
@@ -85,11 +100,10 @@ func _chat_updated():
 
 
 	var match_uri = RegEx.new()
-	match_uri.compile("https?:\/\/(?:www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b(?:[-a-zA-Z0-9()@:%_\\+.~#?&\\/=]*)$")
+	match_uri.compile(URI_REGEX)
 	var result = match_uri.search(message)
 	if result:
-		var url = result.get_string()
-		write("[color=#99ddff][url=%s][LINK][/url][/color]" % url)
+		_write_link(result.get_string())
 	emit_signal("player_messaged", message, sender, is_local_player(sender))
 
 
@@ -117,9 +131,14 @@ func _get_message(msg: String) -> String:
 	return message.get_strings()[1] if message else ""
 
 
-func _open_url(meta):
+func _open_url(meta: String):
 	print("Opening URL " + str(meta))
-	Steam.activateGameOverlayToWebPage(meta)
+	if "discord.gg/" in meta:
+		PopupMessage._show_popup("It is UNSAFE to join anybody's Discord if you are a minor!!! Please be careful of interactions with strangers outside of Webfishing...", 0.0, true)
+		var choice = yield (PopupMessage, "_choice_made")
+		if not choice: return
+	OS.shell_open(meta)
+	# Steam.activateGameOverlayToWebPage(meta)
 
 
 ############

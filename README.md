@@ -2,6 +2,8 @@
 
 <img src="./assets/sockpuppet.png" width="300" alt="Sockpuppet pixel art" />
 
+<a href='https://ko-fi.com/A0A3YDMVY' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://storage.ko-fi.com/cdn/kofi2.png?v=6' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
+
 Socks is an evolving (work-in-progress) development library for [GDWeave](https://github.com/NotNite/GDWeave) mods.
 Our motivation publishing this library is primarily to share these solutions and utilities we've written to address
 problems we've personally encountered while making mods,
