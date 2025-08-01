@@ -77,16 +77,31 @@ func _chat_updated():
 		return
 
 	var URI_REGEX := "https?:\/\/(?:www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b(?:[-a-zA-Z0-9()@:%_\\+.~#?&\\/=]*)"
-	var msg_received = messages[1]
-	print(msg_received)
-	var sender = _get_sender(msg_received)
+	var msg_received: String = messages[1]
+
+
+	var llib = get_node_or_null("/root/LucysLib")
+	var use_lucy = llib != null
+	if use_lucy:
+		var bbct = llib.BBCode.parse_bbcode_text(msg_received)
+		print("original:", msg_received)
+		msg_received = bbct.get_stripped()
+		print("processed:", msg_received)
+	else:
+		breakpoint
+
+	var sender = _get_sender(msg_received, use_lucy)
+	## Workaround for fabricated players or "sender-like" messages
+	var pnames = Players.get_names(true)
+	if not sender in pnames: sender = null
+
 	if not sender:
 		var match_uri = RegEx.new()
 		match_uri.compile(URI_REGEX)
 		var result = match_uri.search(msg_received)
 		if result:
 			_write_link(result.get_string())
-	return  # for now, non-player messages do not emit events
+		return  # for now, non-player messages do not emit events
 	# Perhaps in future can emit, if it is useful somehow
 
 	# TODO !!!!!!!!!!!!!
@@ -94,7 +109,7 @@ func _chat_updated():
 		emit_signal("player_emoted", "EMOTE TODO", sender, is_local_player(sender))
 		return
 
-	var message = _get_message(msg_received)
+	var message = _get_message(msg_received, use_lucy)
 	if not message:
 		return  # Player joined the game etc
 
@@ -116,7 +131,10 @@ func _parse_color_string(s: String) -> String:
 
 
 ## Parses a raw message line and returns the message's sender
-func _get_sender(msg: String) -> String:
+func _get_sender(msg: String, sanitized: bool) -> String:
+	if sanitized:
+		var found = msg.find(":")
+		return msg.get_slice(":", 0) if found >= 1 else null
 	var match_sender = RegEx.new()
 	match_sender.compile("\\](.+)\\[")
 	var sender = match_sender.search(msg)
@@ -124,7 +142,10 @@ func _get_sender(msg: String) -> String:
 
 
 ## Parses a raw message line and returns the actual message content
-func _get_message(msg: String) -> String:
+func _get_message(msg: String, sanitized: bool) -> String:
+	if sanitized:
+		var delimiter_idx = msg.find(":")
+		return msg.substr(delimiter_idx + 2) # "sender: msg" gap
 	var match_message = RegEx.new()
 	match_message.compile(": (.+)")
 	var message = match_message.search(msg)

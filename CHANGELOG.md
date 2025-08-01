@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.3.2
+- Hotfixed Chat module issues caused by recent LucyTools update/conflict causing messages to include unexpected BBCode
+## v0.3.1
+- Hotfixed issue with URIs not being detected due to presence of BBCode in messages (LucyTools mod conflict)
+
 ## v0.3.0
 - New Socks.Utils module
 - Added Players.get_lobby_owner for retrieving the current lobby's host
