@@ -1,7 +1,13 @@
 # Changelog
 
+## v0.3.3
+- Hotfixed URI messages causing crash; sorry!
+    - This happened because of an infinite loop! Link messages would trigger another link and so on.
+    - Fixed this by adding a negative-lookahead to the match to exclude messages with BBCode `[url=example.com]link[/url]`
+
 ## v0.3.2
 - Hotfixed Chat module issues caused by recent LucyTools update/conflict causing messages to include unexpected BBCode
+
 ## v0.3.1
 - Hotfixed issue with URIs not being detected due to presence of BBCode in messages (LucyTools mod conflict)
 

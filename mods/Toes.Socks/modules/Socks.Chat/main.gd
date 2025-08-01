@@ -76,7 +76,7 @@ func _chat_updated():
 	if messages.size() == 1:
 		return
 
-	var URI_REGEX := "https?:\/\/(?:www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b(?:[-a-zA-Z0-9()@:%_\\+.~#?&\\/=]*)"
+	var URI_REGEX := "(?<!url=)https?:\/\/(?:www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b(?:[-a-zA-Z0-9()@:%_\\+.~#?&\\/=]*)"
 	var msg_received: String = messages[1]
 
 
