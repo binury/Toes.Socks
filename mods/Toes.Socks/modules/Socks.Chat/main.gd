@@ -84,9 +84,9 @@ func _chat_updated():
 	var use_lucy = llib != null
 	if use_lucy:
 		var bbct = llib.BBCode.parse_bbcode_text(msg_received)
-		print("original:", msg_received)
+		# print("original:", msg_received)
 		msg_received = bbct.get_stripped()
-		print("processed:", msg_received)
+		# print("processed:", msg_received)
 	else:
 		breakpoint
 
