@@ -3,6 +3,7 @@ extends Node
 signal player_added(player)
 signal player_removed(player)
 signal ingame
+signal outgame
 
 var by_steam_id := {}
 var in_game = false
@@ -25,7 +26,9 @@ func _remove_player(node: Node):
 
 func _player_removed(node: Node):
 	if !_is_player(node): return
-	if node.name == "player": local_player = null
+	if node.name == "player":
+		local_player = null
+		emit_signal("outgame")
 	else: _remove_player(node)
 	emit_signal("player_removed", node)
 
@@ -271,7 +274,7 @@ func is_player_ignored(id) -> bool:
 
 ## Check if the player is busy
 func is_busy(player = local_player):
-	return player.busy
+	if player: return player.busy
 
 
 static func sort_by_length(a: String, b: String) -> bool:
