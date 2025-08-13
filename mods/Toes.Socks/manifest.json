@@ -5,7 +5,8 @@
   "Metadata": {
     "Name": "Socks",
     "Author": "Toes",
-    "Version": "0.3.3",
-    "Description": "Socks is a library to facilitate joy in Webfishing mod development"
+    "Version": "0.3.4",
+    "Description": "Socks is a library to facilitate joy in Webfishing mod development",
+    "Homepage": "https://github.com/binury/Toes.Socks"
   }
 }
