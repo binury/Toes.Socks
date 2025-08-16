@@ -20,18 +20,34 @@ Sockpuppet pixel art by [okayo top hat](https://es.pixilart.com/to-hat-banana)
 
 ### Example
 
-```gds
+```py
 onready var Players = get_node("/root/ToesSocks/Players")
 onready var Chat = get_node("/root/ToesSocks/Chat")
 
+var currently_worn_hat := "hat_none"
+var is_lobby_owner := false
+
 func _ready():
 	Chat.connect("player_messaged", self, "_on_player_messaged")
+	Players.connect("ingame", self, "_on_ingame")
+	Players.connect("outgame", self, "_on_outgame")
 
 
 func _on_player_messaged(message: String, player_name: String, is_self: bool):
 	if is_self: return
-
 	Chat.send("Hi, %s!" % player_name)
+
+
+func _on_ingame() -> void:
+	# Initialize mod, once we are in-game
+	currently_worn_hat = Players.get_cosmetics()["hat"]
+	is_lobby_owner = Players.local_player == Players.get_lobby_owner()
+
+
+func _on_outgame() -> void:
+	# Teardown in prep for next lobby
+	currently_worn_hat = "hat_none"		
+	is_lobby_owner = false
 ```
 
 ### Example projects
@@ -47,7 +63,7 @@ func _on_player_messaged(message: String, player_name: String, is_self: bool):
 ## Help!
 
 Please feel free to submit [RFC issues](https://github.com/buritica/mgt/blob/master/templates/rfc_template.md) with ideas for
-new utilities or even modules. I can be reached on Discord `@toes` for discussion, collaboration, or questions. I recommend avoiding the Webfishing modding Discord server.
+new utilities or even modules. I can be reached on Discord `@toes` for discussion, collaboration, or questions. ***I recommend avoiding the Webfishing modding Discord server***.
 
 > [!TIP]
 > You can [reach out to me](https://ko-fi.com/c/993813af6b) for help with building your mod project.

@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.4.0
+- New `outgame` signal emitted from Players
+    - You can use this like `ingame` instead of testing for the existence of `Players.local_player` etc
+- Fixed `Players.in_game` was never properly reset to false after leaving a game
+    - We'd sorta never ended up using this, personally, and honestly forgot about it until now, sorry!
+
 ## v0.3.3
 - Hotfixed URI messages causing crash; sorry!
     - This happened because of an infinite loop! Link messages would trigger another link and so on.
