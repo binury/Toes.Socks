@@ -29,6 +29,7 @@ func _player_removed(node: Node):
 	if node.name == "player":
 		local_player = null
 		emit_signal("outgame")
+		in_game = false
 	else: _remove_player(node)
 	emit_signal("player_removed", node)
 
