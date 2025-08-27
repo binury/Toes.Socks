@@ -53,8 +53,7 @@ func _init():
 	HUD.gamechat.connect("meta_clicked", self, "_open_url")
 
 
-
-func _write_link(url:String):
+func _write_link(url: String):
 	var MAX_TITLE_CHARS := 30
 	var LINK_COLOR = "66C0F4"
 
@@ -64,7 +63,12 @@ func _write_link(url:String):
 	var link_text = "LINK: " + path.get_string()
 	if link_text.length() > MAX_TITLE_CHARS:
 		link_text = link_text.substr(0, MAX_TITLE_CHARS) + "…"
-	write("[center][font=res://Assets/Themes/font_alternate.tres][color=#%s][url=%s][%s][/url][/color][/font][/center]" % [LINK_COLOR, url, link_text])
+	write(
+		(
+			"[center][font=res://Assets/Themes/font_alternate.tres][color=#%s][url=%s][%s][/url][/color][/font][/center]"
+			% [LINK_COLOR, url, link_text]
+		)
+	)
 
 
 func _chat_updated():
@@ -79,7 +83,6 @@ func _chat_updated():
 	var URI_REGEX := "(?<!url=)https?:\/\/(?:www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b(?:[-a-zA-Z0-9()@:%_\\+.~#?&\\/=]*)"
 	var msg_received: String = messages[1]
 
-
 	var llib = get_node_or_null("/root/LucysLib")
 	var use_lucy = llib != null
 	if use_lucy:
@@ -93,7 +96,8 @@ func _chat_updated():
 	var sender = _get_sender(msg_received, use_lucy)
 	## Workaround for fabricated players or "sender-like" messages
 	var pnames = Players.get_names(true)
-	if not sender in pnames: sender = null
+	if not sender in pnames:
+		sender = null
 
 	if not sender:
 		var match_uri = RegEx.new()
@@ -112,7 +116,6 @@ func _chat_updated():
 	var message = _get_message(msg_received, use_lucy)
 	if not message:
 		return  # Player joined the game etc
-
 
 	var match_uri = RegEx.new()
 	match_uri.compile(URI_REGEX)
@@ -145,7 +148,7 @@ func _get_sender(msg: String, sanitized: bool) -> String:
 func _get_message(msg: String, sanitized: bool) -> String:
 	if sanitized:
 		var delimiter_idx = msg.find(":")
-		return msg.substr(delimiter_idx + 2) # "sender: msg" gap
+		return msg.substr(delimiter_idx + 2)  # "sender: msg" gap
 	var match_message = RegEx.new()
 	match_message.compile(": (.+)")
 	var message = match_message.search(msg)
@@ -155,9 +158,14 @@ func _get_message(msg: String, sanitized: bool) -> String:
 func _open_url(meta: String):
 	print("Opening URL " + str(meta))
 	if "discord.gg/" in meta:
-		PopupMessage._show_popup("It is UNSAFE to join anybody's Discord if you are a minor!!! Please be careful of interactions with strangers outside of Webfishing...", 0.0, true)
-		var choice = yield (PopupMessage, "_choice_made")
-		if not choice: return
+		PopupMessage._show_popup(
+			"It is UNSAFE to join anybody's Discord if you are a minor!!! Please be careful of interactions with strangers outside of Webfishing...",
+			0.0,
+			true
+		)
+		var choice = yield(PopupMessage, "_choice_made")
+		if not choice:
+			return
 	OS.shell_open(meta)
 	# Steam.activateGameOverlayToWebPage(meta)
 
@@ -166,14 +174,16 @@ func _open_url(meta: String):
 ## Public ##
 ############
 
+
 ## Retrieve an array of chat messages, optionally with a limit
 ## @experimental
 func get_all(amt_of_lines: int = 0) -> Array:
 	if amt_of_lines > 0:
-		var messages = Array(Network.GAMECHAT.rsplit('\n', false, amt_of_lines))
+		var messages = Array(Network.GAMECHAT.rsplit("\n", false, amt_of_lines))
 		return messages if amt_of_lines >= messages.size() else messages.slice(1, amt_of_lines)
-	var messages = Network.GAMECHAT.split('\n', false)
+	var messages = Network.GAMECHAT.split("\n", false)
 	return Array(messages)
+
 
 ## Check whether the local_player's name matches the given name
 ## This is possibly broken/forged due to namespace collision
@@ -238,6 +248,7 @@ func notify(msg: String):
 func get_chatbox() -> LineEdit:
 	var chat = Players.local_player.hud.chat
 	return chat
+
 
 ## Get any currently typed message from the chatbox, if any
 ## @experimental

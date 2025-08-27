@@ -12,7 +12,6 @@ var local_player
 var entities
 
 
-
 func _is_player(node: Node) -> bool:
 	return node.get("actor_type") == "player"
 
@@ -20,23 +19,26 @@ func _is_player(node: Node) -> bool:
 func _add_player(node: Node):
 	by_steam_id[node.owner_id] = node
 
+
 func _remove_player(node: Node):
 	by_steam_id.erase(node.owner_id)
 
 
 func _player_removed(node: Node):
-	if !_is_player(node): return
+	if !_is_player(node):
+		return
 	if node.name == "player":
 		local_player = null
 		emit_signal("outgame")
 		in_game = false
-	else: _remove_player(node)
+	else:
+		_remove_player(node)
 	emit_signal("player_removed", node)
 
 
 func _player_added(node: Node):
-	var is_local_player: = node.name == "player"
-	var is_other_player: = node.name.begins_with("@player@")
+	var is_local_player := node.name == "player"
+	var is_other_player := node.name.begins_with("@player@")
 
 	if is_local_player:
 		local_player = node
@@ -58,12 +60,16 @@ func _setup():
 	entities.connect("child_entered_tree", self, "_player_added")
 	entities.connect("child_exiting_tree", self, "_player_removed")
 
+
 func _check_if_ingame_and_local_player_is_ready(node: Node):
 	in_game = get_tree().current_scene.name == "world"
-	if in_game and node.name == "main_map": _setup()
+	if in_game and node.name == "main_map":
+		_setup()
+
 
 func _ready():
 	get_tree().connect("node_added", self, "_check_if_ingame_and_local_player_is_ready")
+
 
 ############
 ## Public ##
@@ -85,9 +91,7 @@ func check(steamid: String) -> bool:
 
 ## Get a Player by their Steam ID
 func get_player(steamid: String) -> Actor:
-	assert(
-		check(steamid), "No player found with id: " + steamid + "! Check if player exists first!"
-	)
+	assert(check(steamid), "No player found with id: " + steamid + "! Check if player exists first!")
 	return by_steam_id[int(steamid)]
 
 
@@ -96,10 +100,7 @@ func get_username(player = local_player) -> String:
 	var id: int
 	if typeof(player) == TYPE_STRING:
 		id = int(player)
-		assert(
-			check(String(id)),
-			"No player found with id: " + String(id) + "! Check if player exists first!"
-		)
+		assert(check(String(id)), "No player found with id: " + String(id) + "! Check if player exists first!")
 	else:
 		if !is_instance_valid(player):
 			return ""
@@ -109,7 +110,8 @@ func get_username(player = local_player) -> String:
 
 ## Get the current lobby's owner ("host")
 func get_lobby_owner() -> Actor:
-	if Network.STEAM_LOBBY_ID < 1: return local_player
+	if Network.STEAM_LOBBY_ID < 1:
+		return local_player
 	return get_player(str(Steam.getLobbyOwner(Network.STEAM_LOBBY_ID)))
 
 
@@ -117,8 +119,7 @@ func get_lobby_owner() -> Actor:
 ## (Convenience method)
 func get_title(player: Actor = local_player) -> String:
 	assert(
-		is_player_valid(player),
-		"Argument error - Invalid Actor received - check id & validate player object first!"
+		is_player_valid(player), "Argument error - Invalid Actor received - check id & validate player object first!"
 	)
 	return player.get_node("Viewport/player_label").title
 
@@ -129,8 +130,7 @@ func get_title(player: Actor = local_player) -> String:
 ## (Convenience method)
 func get_id(player: Actor = local_player) -> String:
 	assert(
-		is_player_valid(player),
-		"Argument error - Invalid Actor received - check id & validate player object first!"
+		is_player_valid(player), "Argument error - Invalid Actor received - check id & validate player object first!"
 	)
 	return String(player.owner_id)
 
@@ -189,7 +189,6 @@ func get_chat_color(player = local_player):
 		return null
 	var player_color = Globals.cosmetic_data[target_primary_color]["file"].main_color
 	return player_color
-
 
 
 ## Get player's current Vector3 position
@@ -266,8 +265,10 @@ func get_players_dict(include_self = false) -> Dictionary:
 func is_player_blocked(id) -> bool:
 	return PlayerData.players_hidden.has(int(id))
 
+
 func is_player_muted(id) -> bool:
 	return PlayerData.players_muted.has(int(id))
+
 
 func is_player_ignored(id) -> bool:
 	return is_player_blocked(id) or is_player_muted(id)
@@ -275,7 +276,8 @@ func is_player_ignored(id) -> bool:
 
 ## Check if the player is busy
 func is_busy(player = local_player):
-	if player: return player.busy
+	if player:
+		return player.busy
 
 
 static func sort_by_length(a: String, b: String) -> bool:
