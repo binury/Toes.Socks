@@ -238,6 +238,10 @@ func emote_as(who: String, msg: String, color: String = "Grey", local: bool = fa
 		_init()
 	Network._send_message("(" + who + " " + msg + ")", _parse_color_string(color), local)
 
+## send_letter wrapper
+func send_letter(player: Actor, header: String, closing: String, body: String, items: Array = []):
+	PlayerData._send_letter(int(Players.get_id(player)), header, closing, body, items)
+
 
 ## Convenience method for sending player notifications
 func notify(msg: String):
