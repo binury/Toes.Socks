@@ -1,5 +1,8 @@
 # Changelog
 
+## v0.5.0
+- New `Chat.send_letter` wrapper method
+
 ## v0.4.0
 - New `outgame` signal emitted from Players
     - You can use this like `ingame` instead of testing for the existence of `Players.local_player` etc

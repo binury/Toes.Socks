@@ -1,20 +1,22 @@
 # Socks
 
+<a href="https://i.imgur.com/FpEsyLx.png">
 <img src="https://i.imgur.com/K2XB6AP.png" width="60%" alt="Sockpuppet pixel art" />
+</a>
 <br/>
-<a href='https://ko-fi.com/A0A3YDMVY' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://storage.ko-fi.com/cdn/kofi2.png?v=6' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
+<small>
+Sockpuppet pixel art by <a href="https://es.pixilart.com/to-hat-banana">okayo top hat</a>
+</small>
 <br/>
 
-**Socks** is an evolving (work-in-progress) development library for [GDWeave](https://github.com/NotNite/GDWeave) mods.
+### **Socks** is the _best_ library for Webfishing modders writing [GDWeave](https://github.com/NotNite/GDWeave) mods.
+
 Our motivation publishing this library is primarily to share these solutions and utilities we've written to address
 problems we've personally encountered while making mods,
 with the hopes you might be able to spend more time focused on fun than overcoming technical roadblocks.
 
-Check out [Better Webfishing Mod Template](https://github.com/binury/better_webfishing_mod_template) for a template/guide to making
-mods which patch over the game's code.
-
-
-Sockpuppet pixel art by [okayo top hat](https://es.pixilart.com/to-hat-banana)
+Also, check out [Better Webfishing Mod Template](https://github.com/binury/better_webfishing_mod_template) for a template/guide to making
+patch mods that write over the game's code!
 
 ## Usage
 
@@ -46,7 +48,7 @@ func _on_ingame() -> void:
 
 func _on_outgame() -> void:
 	# Teardown in prep for next lobby
-	currently_worn_hat = "hat_none"		
+	currently_worn_hat = "hat_none"
 	is_lobby_owner = false
 ```
 
@@ -57,13 +59,12 @@ func _on_outgame() -> void:
 - [Trivia](https://github.com/binury/Toes.Trivia)
 - [Pip Pals](https://github.com/binury/Toes.Pip-Pals)
 
-
 <br/>
 
 ## Help!
 
-Please feel free to submit [RFC issues](https://github.com/buritica/mgt/blob/master/templates/rfc_template.md) with ideas for
-new utilities or even modules. I can be reached on Discord `@toes` for discussion, collaboration, or questions. ***I recommend avoiding the Webfishing modding Discord server***.
+Please feel welcomed to submit [RFC issues](https://github.com/buritica/mgt/blob/master/templates/rfc_template.md) with ideas for
+new utilities or even modules. I can be reached on Discord `@toes` for discussion, collaboration, or questions. **_I recommend avoiding the Webfishing modding Discord server_**.
 
 > [!TIP]
 > You can [reach out to me](https://ko-fi.com/c/993813af6b) for help with building your mod project.
