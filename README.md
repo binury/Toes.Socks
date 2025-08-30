@@ -1,7 +1,7 @@
 # Socks
 
 <a href="https://i.imgur.com/FpEsyLx.png">
-<img src="https://i.imgur.com/K2XB6AP.png" width="60%" alt="Sockpuppet pixel art" />
+<img src="https://i.imgur.com/K2XB6AP.png" width="38%" alt="Sockpuppet pixel art" />
 </a>
 <br/>
 <small>
@@ -15,14 +15,14 @@ Our motivation publishing this library is primarily to share these solutions and
 problems we've personally encountered while making mods,
 with the hopes you might be able to spend more time focused on fun than overcoming technical roadblocks.
 
-Also, check out [Better Webfishing Mod Template](https://github.com/binury/better_webfishing_mod_template) for a template/guide to making
-patch mods that write over the game's code!
+You may also like to check out [Better Webfishing Mod Template](https://github.com/binury/better_webfishing_mod_template) for a template/guide to making
+patch mods that write over the game's code.
 
-## Usage
-
-### Example
+ --- 
 
 ```py
+## Example Usage of building a mod with Socks
+
 onready var Players = get_node("/root/ToesSocks/Players")
 onready var Chat = get_node("/root/ToesSocks/Chat")
 
@@ -52,7 +52,41 @@ func _on_outgame() -> void:
 	is_lobby_owner = false
 ```
 
-### Example projects
+## Modules
+
+GDScriptify has started breaking when generating our docs - forgive our outdated [docs](./docs/index.md) in the meantime until we fix that...
+
+### [Chat](https://github.com/binury/Toes.Socks/blob/main/mods/Toes.Socks/modules/Socks.Chat/main.gd)
+
+### [Players](https://github.com/binury/Toes.Socks/blob/main/mods/Toes.Socks/modules/Socks.Players/main.gd)
+
+### [Hotkeys](https://github.com/binury/Toes.Socks/blob/main/mods/Toes.Socks/modules/Socks.Hotkeys/hotkeys.gd)
+
+```py
+# tablecopter.gd
+
+var enabled := false
+func _ready():
+	# T Hotkey
+	var toggle_signal_name = Hotkeys.add(
+		{"name": "toggle_tablecopter", "label": "Toggle Tablecopter", "key_code": KEY_T, "repeat": false }
+	)
+	Hotkeys.connect(toggle_signal_name, self, "_handle_toggle")
+
+	# CTRL+T Hotkey
+	var mode_toggle_signal_name = Hotkeys.add(
+		{"name": HOTKEY_NAME + "_mode", "label": HOTKEY_LABEL + " Mode", "key_code": KEY_T, "repeat": false, "modifiers": ["control"] }
+	)
+	Hotkeys.connect(mode_toggle_signal_name, self, "_handle_mode_toggle")
+
+func _handle_toggle():
+	enabled = !enabled
+```
+
+See [Hotkey Configuration Documentation](https://github.com/binury/Toes.Socks/blob/main/mods/Toes.Socks/modules/Socks.Hotkeys/hotkey_config.gd) for all hotkey options
+
+
+## Example projects
 
 - [Finapse X](https://github.com/geringverdien/TeamFishnet/tree/main/Finapse%20X)
 - [Jarvis](https://github.com/geringverdien/TeamFishnet/blob/main/Jarvis/project%20-%20prod/mods/eli.Jarvis/main.gd)
@@ -61,10 +95,11 @@ func _on_outgame() -> void:
 
 <br/>
 
-## Help!
+## 📚 Project Links
 
-Please feel welcomed to submit [RFC issues](https://github.com/buritica/mgt/blob/master/templates/rfc_template.md) with ideas for
-new utilities or even modules. I can be reached on Discord `@toes` for discussion, collaboration, or questions. **_I recommend avoiding the Webfishing modding Discord server_**.
+- [Changelog](https://thunderstore.io/c/webfishing/p/toes/Socks/changelog)  
+- [Contributing (PRs welcome)](https://github.com/binury/Toes.Socks/pulls)  
+- [Known Issues](https://github.com/binury/Toes.Socks/issues?q=sort%3Aupdated-desc+is%3Aissue+is%3Aopen)  
+- [Feedback & Bug Reports (Discord)](https://discord.gg/kjf3FCAMDb)  
+- [Roadmap & Feature Requests](https://github.com/binury/Toes.Socks/issues?q=sort%3Aupdated-desc%20is%3Aissue%20is%3Aopen%20label%3Aenhancement)
 
-> [!TIP]
-> You can [reach out to me](https://ko-fi.com/c/993813af6b) for help with building your mod project.
