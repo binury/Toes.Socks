@@ -1,0 +1,24 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://mods/Toes.Socks/modules/Socks.Hotkeys/menu_hotkey_picker_button.gd" type="Script" id=1]
+
+[node name="input_remap" type="HBoxContainer"]
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="."]
+margin_top = 3.0
+margin_right = 97.0
+margin_bottom = 17.0
+size_flags_horizontal = 3
+text = "Move Forward: "
+
+[node name="button" type="Button" parent="."]
+margin_left = 101.0
+margin_right = 113.0
+margin_bottom = 20.0
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.35
+toggle_mode = true
+script = ExtResource( 1 )
+
+[connection signal="toggled" from="button" to="button" method="_on_button_toggled"]

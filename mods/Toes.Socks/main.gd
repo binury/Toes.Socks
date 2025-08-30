@@ -5,7 +5,9 @@ const PREFIX = "Socks"
 const MODULES_LIST = {
 	"Players": preload("res://mods/Toes.Socks/modules/Socks.Players/main.gd"),
 	"Chat": preload("res://mods/Toes.Socks/modules/Socks.Chat/main.gd"),
+	"Hotkeys": preload("res://mods/Toes.Socks/modules/Socks.Hotkeys/hotkeys.gd"),
 	"Utils": preload("res://mods/Toes.Socks/modules/Socks.Utils/main.gd"),
+
 }
 
 var modules = {}
