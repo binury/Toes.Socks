@@ -164,7 +164,8 @@ func add(hotkey_config: Dictionary) -> String:
 		"event": event,
 		"repeat": repeat,
 		"only_when_in_game": only_when_in_game,
-		"picker": hotkey_picker
+		"picker": hotkey_picker,
+		"skip_if_busy": skip_if_busy
 	}
 	hotkey_picker.name = "input_%s" % name
 	var label_node = hotkey_picker.get_child(0)
