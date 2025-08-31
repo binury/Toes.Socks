@@ -271,7 +271,8 @@ func is_player_muted(id) -> bool:
 
 
 func is_player_ignored(id) -> bool:
-	return is_player_blocked(id) or is_player_muted(id)
+	return is_player_blocked(id) or is_player_muted(id) or Steam.getFriendRelationship(int(id)) in [Steam.FRIEND_RELATION_BLOCKED, Steam.FRIEND_RELATION_IGNORED]
+
 
 
 ## Check if the player is busy
