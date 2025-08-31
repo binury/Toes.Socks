@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.999.1 - Misc
+
+- Hotfixed `skip_if_busy` hotkey option not saving
+- Added Players.is_ignored to replace Players.is_player_ignored
+- Changed Players.is_ignored to check and consider if the player has been ignored/blocked through Steam
+
 ## v0.999.0 - New [Socks.Hotkeys](https://github.com/binury/Toes.Socks/blob/main/mods/Toes.Socks/modules/Socks.Hotkeys/hotkeys.gd) module
 
 - Version 1 pre-release build
