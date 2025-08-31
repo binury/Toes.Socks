@@ -272,13 +272,11 @@ func is_player_muted(id) -> bool:
 
 ## @Deprecated - Use is_ignored instead
 func is_player_ignored(id) -> bool:
-	return self._is_ignored
+	return self.is_ignored(id)
 
 ## Check if a player is either muted or ignored, on Webfishing or Steam
 func is_ignored(id) -> bool:
 	return is_player_blocked(id) or is_player_muted(id) or Steam.getFriendRelationship(int(id)) in [Steam.FRIEND_RELATION_BLOCKED, Steam.FRIEND_RELATION_IGNORED]
-
-
 
 ## Check if the player is busy
 func is_busy(player = local_player):
