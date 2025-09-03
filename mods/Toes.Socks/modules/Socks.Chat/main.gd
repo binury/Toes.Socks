@@ -30,6 +30,15 @@ var _Chat
 onready var Network = get_node("/root/Network")
 onready var Players = get_node("/root/ToesSocks/Players")
 
+var DEBUG := OS.has_feature("editor") and false
+
+func _debug(msg, data = null):
+	if not DEBUG:
+		return
+	print("[Socks.Chat]: %s" % msg)
+	if data != null:
+		print(JSON.print(data, "\t"))
+
 
 func _ready():
 	pass
@@ -82,18 +91,17 @@ func _chat_updated():
 
 	var URI_REGEX := "(?<!url=)https?:\/\/(?:www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b(?:[-a-zA-Z0-9()@:%_\\+.~#?&\\/=]*)"
 	var msg_received: String = messages[1]
-
+	
 	var llib = get_node_or_null("/root/LucysLib")
 	var use_lucy = llib != null
 	if use_lucy:
 		var bbct = llib.BBCode.parse_bbcode_text(msg_received)
 		# print("original:", msg_received)
 		msg_received = bbct.get_stripped()
-		# print("processed:", msg_received)
 	else:
 		breakpoint
 
-	var sender = _get_sender(msg_received, use_lucy)
+	var sender = _get_sender(msg_received)
 	## Workaround for fabricated players or "sender-like" messages
 	var pnames = Players.get_names(true)
 	if not sender in pnames:
@@ -108,9 +116,10 @@ func _chat_updated():
 		return  # for now, non-player messages do not emit events
 	# Perhaps in future can emit, if it is useful somehow
 
-	# TODO !!!!!!!!!!!!!
 	if msg_received[0] == "(":
-		emit_signal("player_emoted", "EMOTE TODO", sender, is_local_player(sender))
+		var emote := _get_emote(msg_received, sender)
+		_debug("%s emoted: %s" % [sender, emote])
+		emit_signal("player_emoted", emote, sender, is_local_player(sender))
 		return
 
 	var message = _get_message(msg_received, use_lucy)
@@ -122,6 +131,7 @@ func _chat_updated():
 	var result = match_uri.search(message)
 	if result:
 		_write_link(result.get_string())
+	_debug("%s messaged: %s" % [sender, message])
 	emit_signal("player_messaged", message, sender, is_local_player(sender))
 
 
@@ -134,17 +144,23 @@ func _parse_color_string(s: String) -> String:
 
 
 ## Parses a raw message line and returns the message's sender
-func _get_sender(msg: String, sanitized: bool) -> String:
-	if sanitized:
-		var found = msg.find(":")
-		return msg.get_slice(":", 0) if found >= 1 else null
-	var match_sender = RegEx.new()
-	match_sender.compile("\\](.+)\\[")
-	var sender = match_sender.search(msg)
-	return sender.get_strings()[1] if sender else ""
+func _get_sender(msg: String) -> String:
+	var sender := "???"
+	var pnames = Players.get_names(true)
+	for p in pnames:
+		var match_sender := RegEx.new()
+		if msg[0] == "(":
+			match_sender.compile("\\(" + p + " ")
+		else:
+			match_sender.compile(p + ": ")
+		if match_sender.search(msg):
+			sender = p
+			break
+	return sender
 
 
-## Parses a raw message line and returns the actual message content
+## Parses a raw message line and returns the message content
+## Sanitized arg should be false if the message may contain BBCode
 func _get_message(msg: String, sanitized: bool) -> String:
 	if sanitized:
 		var delimiter_idx = msg.find(":")
@@ -154,6 +170,12 @@ func _get_message(msg: String, sanitized: bool) -> String:
 	var message = match_message.search(msg)
 	return message.get_strings()[1] if message else ""
 
+
+## Parses a raw emote line and returns the emote content
+func _get_emote(msg: String, sender: String) -> String:
+	msg = msg.replace(sender + " ", "")
+	msg = msg.substr(1, msg.length() - 2)
+	return msg
 
 func _open_url(meta: String):
 	print("Opening URL " + str(meta))
@@ -237,6 +259,7 @@ func emote_as(who: String, msg: String, color: String = "Grey", local: bool = fa
 	if not is_instance_valid(HUD):
 		_init()
 	Network._send_message("(" + who + " " + msg + ")", _parse_color_string(color), local)
+
 
 ## send_letter wrapper
 func send_letter(player: Actor, header: String, closing: String, body: String, items: Array = []):
