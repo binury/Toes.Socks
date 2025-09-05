@@ -1,4 +1,7 @@
-# class_name Chat
+# Copyright (c) 2025 binury
+
+# This source code is licensed under the MIT license found in the
+# LICENSE file in the root directory of this repository.
 
 extends Node
 ## The Socks.Chat module was created to address the naturally opaque and cumbersome process of hooking into the game's chat methods.
@@ -31,6 +34,7 @@ onready var Network = get_node("/root/Network")
 onready var Players = get_node("/root/ToesSocks/Players")
 
 var DEBUG := OS.has_feature("editor") and false
+
 
 func _debug(msg, data = null):
 	if not DEBUG:
@@ -91,7 +95,7 @@ func _chat_updated():
 
 	var URI_REGEX := "(?<!url=)https?:\/\/(?:www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b(?:[-a-zA-Z0-9()@:%_\\+.~#?&\\/=]*)"
 	var msg_received: String = messages[1]
-	
+
 	var llib = get_node_or_null("/root/LucysLib")
 	var use_lucy = llib != null
 	if use_lucy:
@@ -176,6 +180,7 @@ func _get_emote(msg: String, sender: String) -> String:
 	msg = msg.replace(sender + " ", "")
 	msg = msg.substr(1, msg.length() - 2)
 	return msg
+
 
 func _open_url(meta: String):
 	print("Opening URL " + str(meta))

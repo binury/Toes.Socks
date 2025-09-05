@@ -1,3 +1,8 @@
+# Copyright (c) 2025 binury
+
+# This source code is licensed under the MIT license found in the
+# LICENSE file in the root directory of this repository.
+
 extends Node
 
 signal player_added(player)
@@ -100,9 +105,11 @@ func _check_if_ingame_and_local_player_is_ready(node: Node):
 	if in_game and node.name == "main_map":
 		_setup()
 
+
 func _check_if_went_to_main_menu(node: Node):
 	if node.name == "main_menu":
 		_emit_game_status("at_main_menu")
+
 
 func _ready():
 	get_tree().connect("node_added", self, "_check_if_ingame_and_local_player_is_ready")
@@ -314,9 +321,15 @@ func is_player_muted(id) -> bool:
 func is_player_ignored(id) -> bool:
 	return self.is_ignored(id)
 
+
 ## Check if a player is either muted or ignored, on Webfishing or Steam
 func is_ignored(id) -> bool:
-	return is_player_blocked(id) or is_player_muted(id) or Steam.getFriendRelationship(int(id)) in [Steam.FRIEND_RELATION_BLOCKED, Steam.FRIEND_RELATION_IGNORED]
+	return (
+		is_player_blocked(id)
+		or is_player_muted(id)
+		or Steam.getFriendRelationship(int(id)) in [Steam.FRIEND_RELATION_BLOCKED, Steam.FRIEND_RELATION_IGNORED]
+	)
+
 
 ## Check if the player is busy
 func is_busy(player = local_player):

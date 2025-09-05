@@ -9,6 +9,8 @@ const MODULES_LIST = {
 }
 
 var modules = {}
+
+
 func _ready():
 	for module in MODULES_LIST:
 		var resource = MODULES_LIST[module]
