@@ -4,6 +4,7 @@ signal player_added(player)
 signal player_removed(player)
 signal ingame
 signal outgame
+signal at_main_menu
 
 var DEBUG := OS.has_feature("editor") and true
 
@@ -99,9 +100,13 @@ func _check_if_ingame_and_local_player_is_ready(node: Node):
 	if in_game and node.name == "main_map":
 		_setup()
 
+func _check_if_went_to_main_menu(node: Node):
+	if node.name == "main_menu":
+		_emit_game_status("at_main_menu")
 
 func _ready():
 	get_tree().connect("node_added", self, "_check_if_ingame_and_local_player_is_ready")
+	get_tree().connect("node_added", self, "_check_if_went_to_main_menu")
 
 
 ############
