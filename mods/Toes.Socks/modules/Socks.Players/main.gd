@@ -146,11 +146,13 @@ func get_username(player = local_player) -> String:
 	return Steam.getFriendPersonaName(id)
 
 
-## Get the current lobby's owner ("host")
-func get_lobby_owner() -> Actor:
+## Get the current lobby owner ("host")'s Actor
+## If there is no Actor (e.g., Cove server) returns null
+func get_lobby_owner():
 	if Network.STEAM_LOBBY_ID < 1:
 		return local_player
-	return get_player(str(Steam.getLobbyOwner(Network.STEAM_LOBBY_ID)))
+	var lobby_owner_id := str(Steam.getLobbyOwner(Network.STEAM_LOBBY_ID))
+	return get_player(lobby_owner_id) if check(lobby_owner_id) else null
 
 
 ## Get player's title
