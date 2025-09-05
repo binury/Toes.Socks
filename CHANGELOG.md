@@ -1,5 +1,15 @@
 # Changelog
 
+## v0.1000.0
+
+- Add: Chat `player_emoted signal
+- Enhanced reliability of `ingame` and `outgame` signals
+  - This is potentially a breaking change if your mod relies on inconsistent behavior
+- Added new `Players` signal `at_main_menu`
+- Fixed `Players.get_lobby_owner` throwing assertion errors if there was no `Actor` assigned to the host
+  - This is potentially a breaking change as it now explicitly returns `null` (safely)
+
+
 ## v0.999.1 - Misc
 
 - Hotfixed `skip_if_busy` hotkey option not saving
