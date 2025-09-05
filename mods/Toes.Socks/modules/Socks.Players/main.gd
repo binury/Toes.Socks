@@ -5,11 +5,44 @@ signal player_removed(player)
 signal ingame
 signal outgame
 
+var DEBUG := OS.has_feature("editor") and true
+
+var Utils := preload("res://mods/Toes.Socks/modules/Socks.Utils/main.gd")
+
 var by_steam_id := {}
 var in_game = false
 ## Our player; you
 var local_player
 var entities
+
+
+func _debug(msg, data = null):
+	if not DEBUG:
+		return
+	print("[Socks.Players]: %s" % msg)
+	if data != null:
+		print(JSON.print(data, "\t"))
+
+
+func _emit_game_status(sig: String):
+	_debug("Game status change", sig)
+	Utils.call_debounced("emit_game_status_" + sig, funcref(self, "emit_signal"), 5.0, [sig])
+
+
+func _emit_player_event(sig: String, player: Actor):
+	_debug("Player event", sig)
+	Utils.call_debounced("emit_event_" + sig, funcref(self, "emit_signal"), 5.0, [sig, player])
+
+
+func _process(__) -> void:
+	if in_game and not is_player_valid(local_player):
+		in_game = false
+		_debug("Found no local player but was still in_game...")
+		_emit_game_status("outgame")
+	if (not in_game) and is_player_valid(local_player):
+		in_game = true
+		_debug("Found local player but was still out_game...")
+		_emit_game_status("ingame")
 
 
 func _is_player(node: Node) -> bool:
@@ -29,11 +62,11 @@ func _player_removed(node: Node):
 		return
 	if node.name == "player":
 		local_player = null
-		emit_signal("outgame")
 		in_game = false
+		_emit_game_status("outgame")
 	else:
 		_remove_player(node)
-	emit_signal("player_removed", node)
+	_emit_player_event("player_removed", node)
 
 
 func _player_added(node: Node):
@@ -43,16 +76,16 @@ func _player_added(node: Node):
 	if is_local_player:
 		local_player = node
 		_add_player(node)
-		yield(get_tree().create_timer(0.4), "timeout")
-		emit_signal("ingame")
+		yield(get_tree().create_timer(0.6), "timeout")
+		_emit_game_status("ingame")
 	elif is_other_player:
 		_add_player(node)
 		Steam.setPlayedWith(node.owner_id)
 	else:
 		return
 	connect("tree_exited", node, "_player_removed")
-	yield(get_tree().create_timer(0.4), "timeout")
-	emit_signal("player_added", node)
+	yield(get_tree().create_timer(0.6), "timeout")
+	_emit_player_event("player_added", node)
 
 
 func _setup():

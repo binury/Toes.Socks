@@ -3,7 +3,7 @@ extends Node
 signal hotkey_changed(name, key_code)
 
 const SAVE_FILE_PATH ="user://hotkeys.json"
-var DEBUG := true and OS.has_feature("editor")
+var DEBUG := OS.has_feature("editor") and false
 
 ## A copy of each *originally* supplied hotkey
 var _configs := {}
