@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.1000.13
+
+### Happy Halloween 🦇
+
+No changes
+
+
 ## v0.1000.0
 
 - Add: Chat `player_emoted signal

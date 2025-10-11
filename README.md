@@ -1,11 +1,9 @@
-# Socks
+# S🎃cks
 
-<a href="https://i.imgur.com/FpEsyLx.png">
-<img src="https://i.imgur.com/K2XB6AP.png" width="38%" alt="Sockpuppet pixel art" />
-</a>
+<img src="https://i.imgur.com/QH0cNUs.png" width="38%" alt="Sockpuppet pixel art" />
 <br/>
 <small>
-Sockpuppet pixel art by <a href="https://es.pixilart.com/to-hat-banana">okayo top hat</a>
+(Original) Sockpuppet pixel art by <a href="https://es.pixilart.com/to-hat-banana">okayo top hat</a>
 </small>
 <br/>
 
