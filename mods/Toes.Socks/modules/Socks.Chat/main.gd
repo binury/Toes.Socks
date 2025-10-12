@@ -149,14 +149,18 @@ func _parse_color_string(s: String) -> String:
 
 ## Parses a raw message line and returns the message's sender
 func _get_sender(msg: String) -> String:
+	var color_tag_open = "(\\[color=#\\w{3,8}\\])?"
+	var color_tag_close = "(\\[/color\\])?"
 	var sender := "???"
 	var pnames = Players.get_names(true)
 	for p in pnames:
 		var match_sender := RegEx.new()
-		if msg[0] == "(":
-			match_sender.compile("\\(" + p + " ")
-		else:
-			match_sender.compile(p + ": ")
+		var pattern = (
+			("\\(" + color_tag_open + p + color_tag_close + " ")
+			if msg[0] == "("
+			else (color_tag_open + p + color_tag_close + ": ")
+		)
+		match_sender.compile(pattern)
 		if match_sender.search(msg):
 			sender = p
 			break

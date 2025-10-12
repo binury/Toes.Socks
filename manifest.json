@@ -1,6 +1,6 @@
 {
   "name": "Socks",
-  "version_number": "0.1000.13",
+  "version_number": "0.1001.0",
   "website_url": "https://github.com/binury/Toes.Socks",
   "description": "",
   "dependencies": ["toes-NoNameFix-1.0.0"]

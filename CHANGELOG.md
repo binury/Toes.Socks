@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.1001.00
+
+Fixes regression in Chat module player-name parsing that was introduced in LucysLib compatibility changes
+
 ## v0.1000.13
 
 ### Happy Halloween 🦇
