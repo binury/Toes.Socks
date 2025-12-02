@@ -1,6 +1,6 @@
-# S🎃cks
+# S☃️cks
 
-<img src="https://i.imgur.com/QH0cNUs.png" width="38%" alt="Sockpuppet pixel art" />
+<img src="https://i.imgur.com/wEipOD5.png" width="38%" alt="Sockpuppet pixel art" />
 <br/>
 <small>
 (Original) Sockpuppet pixel art by <a href="https://es.pixilart.com/to-hat-banana">okayo top hat</a>
