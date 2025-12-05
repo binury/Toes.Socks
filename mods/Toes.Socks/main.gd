@@ -11,7 +11,7 @@ const MODULES_LIST = {
 var modules = {}
 
 
-func _ready():
+func _init():
 	for module in MODULES_LIST:
 		var resource = MODULES_LIST[module]
 

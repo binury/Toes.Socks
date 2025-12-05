@@ -29,13 +29,23 @@ func _ready() -> void:
 	controls_settings = get_node("/root/OptionsMenu/Control/Panel/tabs_main/control/ScrollContainer/HBoxContainer/VBoxContainer")
 	connect("hotkey_changed", self, "_on_hotkey_changed")
 
+	var need_to_generate_file := false
 	if not hotkey_save_file.file_exists(SAVE_FILE_PATH):
+		need_to_generate_file = true
+	hotkey_save_file.open(SAVE_FILE_PATH, File.READ_WRITE)
+	var file_content = JSON.parse(hotkey_save_file.get_as_text())
+	var result = file_content.result
+	if typeof(result) != TYPE_DICTIONARY or file_content.error != OK:
+		if file_content.error_string:
+			push_error(file_content.error_string)
+		print("[SOCKS] UNABLE TO LOAD EXISTING HOTKEYS FILE!!! RESETTING CONTENT TO DEFAULT")
+		need_to_generate_file = true
+	if need_to_generate_file:
 		hotkey_save_file.open(SAVE_FILE_PATH, File.WRITE_READ)
 		hotkey_save_file.store_string(JSON.print({
 			"dummy_hotkey": KEY_YDIAERESIS
 		}))
-		hotkey_save_file.close()
-	hotkey_save_file.open(SAVE_FILE_PATH, File.READ_WRITE)
+
 
 	if DEBUG:
 		var dummy := {
@@ -48,6 +58,11 @@ func _ready() -> void:
 			"skip_if_busy": true
 		}
 		self.add(dummy)
+
+	if not hotkey_save_file.is_open():
+		hotkey_save_file.open(SAVE_FILE_PATH, File.READ_WRITE)
+	else:
+		hotkey_save_file.seek(0)
 
 
 func _exit_tree():
@@ -85,7 +100,7 @@ func _on_hotkey_changed(hotkey_name, key_code) -> void:
 	self._save_hotkey()
 
 func _save_hotkey(hotkey = null) -> Dictionary:
-	var save_data : Dictionary = _get_saved_hotkey_binding()
+	var save_data = _get_saved_hotkey_binding()
 	if not hotkey:
 		for name in self._hotkeys.keys():
 			var h = _hotkeys[name]
@@ -116,7 +131,7 @@ func _get_saved_hotkey_binding(hotkey_name = null):
 	var file_content = JSON.parse(hotkey_save_file.get_as_text())
 	var result = file_content.result
 	if typeof(result) != TYPE_DICTIONARY or file_content.error != OK:
-		# TODO: Handle corruption
+		# This should NEVER happen
 		push_error(file_content.error_string)
 		breakpoint
 		return
@@ -126,10 +141,8 @@ func _get_saved_hotkey_binding(hotkey_name = null):
 
 ## Setup new hotkey
 ## Returns the name of the signal that your hotkey triggers
+## @See: ./hotkey_config.gd
 func add(hotkey_config: Dictionary) -> String:
-	# If only we could merge dictionaries in Godot3
-	# TODO: Refactor into defaults
-
 	var name: String = hotkey_config.name
 	if not self._configs.has(name):
 		_configs[name] = hotkey_config
