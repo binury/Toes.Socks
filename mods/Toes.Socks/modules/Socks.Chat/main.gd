@@ -87,6 +87,10 @@ func _write_link(url: String):
 func _chat_updated():
 	if not is_instance_valid(Network):
 		return  # Just a weird edge case
+		
+	# Trying to avoid errors during ticks
+	if not Players.in_game or not Players.local_player:
+		return
 
 	var messages := Network.GAMECHAT.rsplit("\n", false, 1) as Array
 
