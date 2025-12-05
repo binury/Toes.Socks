@@ -54,7 +54,7 @@ func _on_button_toggled(button_pressed):
 
 
 func _unhandled_key_input(event: InputEventKey):
-	if event is InputEventKey and event.scancode != KEY_ESCAPE:
+	if event is InputEventKey and not event.scancode in [KEY_ESCAPE, KEY_ALT, KEY_CONTROL, KEY_SHIFT]:
 		_remap_key(event.scancode)
 	pressed = false
 
