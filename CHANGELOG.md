@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.1001.5
+
+- Changed Socks modules to load as early as possible during `_init` hook rather than `_ready`
+- Fixed issue rebinding hotkeys with modifiers
+- Added/fixed handling of hotkeys.json should the file become corrupted
+
+
 ## v0.1001.3
 
 ### Happy Holidays ☃️
