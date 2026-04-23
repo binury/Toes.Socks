@@ -87,7 +87,7 @@ func _write_link(url: String):
 func _chat_updated():
 	if not is_instance_valid(Network):
 		return  # Just a weird edge case
-		
+
 	# Trying to avoid errors during ticks
 	if not Players.in_game or not Players.local_player:
 		return
@@ -140,6 +140,8 @@ func _chat_updated():
 	if result:
 		_write_link(result.get_string())
 	_debug("%s messaged: %s" % [sender, message])
+
+
 	emit_signal("player_messaged", message, sender, is_local_player(sender))
 
 
@@ -156,6 +158,9 @@ func _get_sender(msg: String) -> String:
 	var color_tag_open = "(\\[color=#\\w{3,8}\\])?"
 	var color_tag_close = "(\\[/color\\])?"
 	var sender := "???"
+
+	if msg.empty(): return sender
+
 	var pnames = Players.get_names(true)
 	for p in pnames:
 		var match_sender := RegEx.new()
@@ -251,6 +256,53 @@ func send(msg: String, color: String = "Grey", local: bool = false):
 	if not is_instance_valid(HUD):
 		_init()
 	send_as("%u", msg, color, local)
+
+## Send a chat message to a specific player
+## Recipient can be a Player Actor or ID
+## Color can be a plain RGB hex color code
+## or any of the following in-game predefined colors:
+## `white` `tan` `brown` `red` `maroon` `grey` `green` `blue`
+## `purple` `salmon` `yellow` `black` `orange` `olive` `teal`
+## Unless echo arg is false, also writes the message to the sender's chat with a "Whisper to [recipient]" tag.
+func send_whisper(msg: String, recipient, color: String = "Grey", echo: bool = true):
+	if not is_instance_valid(HUD):
+		_init()
+	send_whisper_raw("%s: %s" % [Players.get_username(), msg], recipient, color, echo)
+
+## Send a raw chat message to a specific player
+## Recipient can be a Player Actor or ID
+## Color can be a plain RGB hex color code
+## or any of the following in-game predefined colors:
+## `white` `tan` `brown` `red` `maroon` `grey` `green` `blue`
+## `purple` `salmon` `yellow` `black` `orange` `olive` `teal`
+## If echo, also writes the message to the sender's chat with a "Whisper to [recipient]" tag.
+func send_whisper_raw(msg: String, recipient, color: String = "Grey", echo: bool = false):
+	if not is_instance_valid(HUD):
+		_init()
+
+	var target: int
+	if typeof(recipient) in [TYPE_STRING, TYPE_INT]:
+		target = int(recipient)
+	elif is_instance_valid(recipient):
+		target = Players.get_id(recipient)
+	else:
+		_debug("Invalid recipient for send_whisper_raw: %s" % str(recipient))
+		return
+
+	var packet: PoolByteArray = []
+	packet.append_array(
+		var2bytes({"type": "message", "message": msg, "color": color, "local": false}).compress(
+			File.COMPRESSION_GZIP
+		)
+	)
+	Network._send_P2P_Packet(
+		packet,
+		target,
+		Steam.NETWORKING_SEND_RELIABLE,
+		Network.CHANNELS.ACTOR_ACTION
+	)
+	if echo:
+		self.write("[color=#4a4a4280][i]Whisper to %s:[/i] %s[/color]" % [msg, Players.get_username(target)])
 
 
 ## Send an emote

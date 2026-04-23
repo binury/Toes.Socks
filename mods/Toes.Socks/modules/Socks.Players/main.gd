@@ -127,7 +127,7 @@ func is_player_valid(player: Actor) -> bool:
 
 
 ## Check whether a player exists and is valid for the given Steam ID
-func check(steamid: String) -> bool:
+func check(steamid) -> bool:
 	var id = int(steamid)
 	if not id in by_steam_id:
 		return false
@@ -143,7 +143,7 @@ func get_player(steamid: String) -> Actor:
 ## Get player's username, either by id or by actor
 func get_username(player = local_player) -> String:
 	var id: int
-	if typeof(player) == TYPE_STRING:
+	if typeof(player) in [TYPE_STRING, TYPE_INT]:
 		id = int(player)
 		assert(check(String(id)), "No player found with id: " + String(id) + "! Check if player exists first!")
 	else:
